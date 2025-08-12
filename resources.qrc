@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/geoagent" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
