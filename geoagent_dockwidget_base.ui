@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>232</width>
-    <height>141</height>
+    <width>926</width>
+    <height>492</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,17 +16,480 @@
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Replace this QLabel
-with the desired
-plugin content.</string>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
+      <property name="minimumSize">
+       <size>
+        <width>904</width>
+        <height>444</height>
+       </size>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="Chat_UI">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>893</width>
+         <height>406</height>
+        </size>
+       </property>
+       <attribute name="title">
+        <string>Tab 1</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLineEdit" name="Question_box">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>759</width>
+              <height>24</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="minimumSize">
+             <size>
+              <width>93</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Send Chat</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line_3">
+            <property name="minimumSize">
+             <size>
+              <width>3</width>
+              <height>31</height>
+             </size>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line_2">
+            <property name="minimumSize">
+             <size>
+              <width>3</width>
+              <height>31</height>
+             </size>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QTextBrowser" name="textBrowser">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>37</width>
+              <height>49</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>CHAT:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="minimumSize">
+             <size>
+              <width>526</width>
+              <height>49</height>
+             </size>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="Line" name="line_9">
+            <property name="minimumSize">
+             <size>
+              <width>3</width>
+              <height>31</height>
+             </size>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chatgpt_python_console">
+            <property name="minimumSize">
+             <size>
+              <width>72</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Console</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line_7">
+            <property name="minimumSize">
+             <size>
+              <width>3</width>
+              <height>31</height>
+             </size>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="export_ans">
+            <property name="minimumSize">
+             <size>
+              <width>93</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="text">
+             <string>Export Chat</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="clear_ans">
+            <property name="minimumSize">
+             <size>
+              <width>93</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="text">
+             <string>Clear Chat</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line_8">
+            <property name="minimumSize">
+             <size>
+              <width>3</width>
+              <height>31</height>
+             </size>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Parameters_tab">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>893</width>
+         <height>406</height>
+        </size>
+       </property>
+       <attribute name="title">
+        <string>Tab 2</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="Models">
+              <property name="minimumSize">
+               <size>
+                <width>430</width>
+                <height>33</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>The model which will generate the completion.</string>
+              </property>
+              <property name="text">
+               <string>&lt;a href=&quot;https://platform.openai.com/docs/models/overview&quot;&gt;Models &lt;/a&gt;:   </string>
+              </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="model">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>430</width>
+                <height>22</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::WheelFocus</enum>
+              </property>
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::AdjustToContents</enum>
+              </property>
+              <item>
+               <property name="text">
+                <string>text-davinci-003</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>gpt-4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>gpt-3.5-turbo</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>gpt-3.5-turbo-0301</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>text-curie-001</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>text-babbage-001</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>text-ada-001</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>code-davinci-002</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>code-cushman-001</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>claude-3-5-sonnet-20241022</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>claude-3-5-haiku-20241022</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>claude-3-opus-20240229</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>claude-3-sonnet-20240229</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>claude-3-haiku-20240307</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="minimumSize">
+               <size>
+                <width>105</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>If you want, you can use your API key.</string>
+              </property>
+              <property name="text">
+               <string>&lt;a href=&quot;https://platform.openai.com/account/api-keys&quot;&gt;Use your API key:&lt;/a&gt; </string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsPasswordLineEdit" name="custom_apikey">
+              <property name="minimumSize">
+               <size>
+                <width>755</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QLabel" name="claude_label">
+              <property name="minimumSize">
+               <size>
+                <width>94</width>
+                <height>33</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Claude API key for Anthropic models</string>
+              </property>
+              <property name="text">
+               <string>&lt;a href=&quot;https://console.anthropic.com/&quot;&gt;Claude API key:&lt;/a&gt; </string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsPasswordLineEdit" name="claude_apikey">
+              <property name="minimumSize">
+               <size>
+                <width>766</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="minimumSize">
+             <size>
+              <width>869</width>
+              <height>255</height>
+             </size>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>866</width>
+              <height>255</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsPasswordLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>qgspasswordlineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
