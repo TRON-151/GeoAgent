@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>926</width>
-    <height>492</height>
+    <width>1140</width>
+    <height>662</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="0" column="1">
      <widget class="QTabWidget" name="tabWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -23,11 +23,11 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="minimumSize">
-       <size>
-        <width>904</width>
-        <height>444</height>
-       </size>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="whatsThis">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="currentIndex">
        <number>0</number>
@@ -50,197 +50,201 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QLineEdit" name="Question_box">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QLineEdit" name="Question_box">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>480</width>
+                <height>26</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>26</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton">
+              <property name="minimumSize">
+               <size>
+                <width>93</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Send Chat</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Line" name="line_2">
+              <property name="minimumSize">
+               <size>
+                <width>3</width>
+                <height>31</height>
+               </size>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Line" name="line_3">
+              <property name="minimumSize">
+               <size>
+                <width>3</width>
+                <height>31</height>
+               </size>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QTextBrowser" name="textBrowser">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="minimumSize">
-             <size>
-              <width>759</width>
-              <height>24</height>
-             </size>
-            </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
-            <property name="minimumSize">
-             <size>
-              <width>93</width>
-              <height>28</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Send Chat</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="Line" name="line_3">
-            <property name="minimumSize">
-             <size>
-              <width>3</width>
-              <height>31</height>
-             </size>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="Line" name="line_2">
-            <property name="minimumSize">
-             <size>
-              <width>3</width>
-              <height>31</height>
-             </size>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="0">
-         <widget class="QTextBrowser" name="textBrowser">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>37</width>
-              <height>49</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>CHAT:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer">
-            <property name="minimumSize">
-             <size>
-              <width>526</width>
-              <height>49</height>
-             </size>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="Line" name="line_9">
-            <property name="minimumSize">
-             <size>
-              <width>3</width>
-              <height>31</height>
-             </size>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="chatgpt_python_console">
-            <property name="minimumSize">
-             <size>
-              <width>72</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Console</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="Line" name="line_7">
-            <property name="minimumSize">
-             <size>
-              <width>3</width>
-              <height>31</height>
-             </size>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="export_ans">
-            <property name="minimumSize">
-             <size>
-              <width>93</width>
-              <height>28</height>
-             </size>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="text">
-             <string>Export Chat</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="clear_ans">
-            <property name="minimumSize">
-             <size>
-              <width>93</width>
-              <height>28</height>
-             </size>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="text">
-             <string>Clear Chat</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="Line" name="line_8">
-            <property name="minimumSize">
-             <size>
-              <width>3</width>
-              <height>31</height>
-             </size>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>37</width>
+                <height>49</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>CHAT:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>168</width>
+                <height>46</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="Line" name="line_9">
+              <property name="minimumSize">
+               <size>
+                <width>3</width>
+                <height>31</height>
+               </size>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="chatgpt_python_console">
+              <property name="minimumSize">
+               <size>
+                <width>72</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Console</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Line" name="line_7">
+              <property name="minimumSize">
+               <size>
+                <width>3</width>
+                <height>31</height>
+               </size>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="export_ans">
+              <property name="minimumSize">
+               <size>
+                <width>93</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>Export Chat</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="clear_ans">
+              <property name="minimumSize">
+               <size>
+                <width>93</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>Clear Chat</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Line" name="line_8">
+              <property name="minimumSize">
+               <size>
+                <width>3</width>
+                <height>31</height>
+               </size>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -262,19 +266,13 @@
        <attribute name="title">
         <string>Tab 2</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QLabel" name="Models">
-              <property name="minimumSize">
-               <size>
-                <width>430</width>
-                <height>33</height>
-               </size>
-              </property>
+             <widget class="QLabel" name="label_7">
               <property name="toolTip">
                <string>The model which will generate the completion.</string>
               </property>
@@ -296,7 +294,7 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>430</width>
+                <width>40</width>
                 <height>22</height>
                </size>
               </property>
@@ -405,14 +403,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QgsPasswordLineEdit" name="custom_apikey">
-              <property name="minimumSize">
-               <size>
-                <width>755</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
+             <widget class="QgsPasswordLineEdit" name="custom_apikey"/>
             </item>
            </layout>
           </item>
@@ -441,35 +432,19 @@
              </widget>
             </item>
             <item>
-             <widget class="QgsPasswordLineEdit" name="claude_apikey">
-              <property name="minimumSize">
-               <size>
-                <width>766</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
+             <widget class="QgsPasswordLineEdit" name="claude_apikey"/>
             </item>
            </layout>
           </item>
           <item>
-           <spacer name="verticalSpacer_2">
-            <property name="minimumSize">
-             <size>
-              <width>869</width>
-              <height>255</height>
-             </size>
-            </property>
+           <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>866</width>
-              <height>255</height>
+              <width>20</width>
+              <height>40</height>
              </size>
             </property>
            </spacer>
