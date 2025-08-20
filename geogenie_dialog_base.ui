@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>qchatgpt</class>
- <widget class="QDockWidget" name="qchatgpt">
+ <class>geogenie</class>
+ <widget class="QDockWidget" name="geogenie">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>QChatGPT</string>
+   <string>GeoGenie</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
@@ -93,20 +93,6 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="checked">
                <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="pdfchat">
-              <property name="text">
-               <string>PDF</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="image">
-              <property name="text">
-               <string>Image</string>
               </property>
              </widget>
             </item>
@@ -194,26 +180,6 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="orientation">
                <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="voiceresponse">
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="text">
-               <string>Voice Response</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="voicestop">
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="text">
-               <string>Stop Voice</string>
               </property>
              </widget>
             </item>
@@ -315,80 +281,6 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="orientation">
                <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="microphone">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::StrongFocus</enum>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Mic (sec)</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="audio_duration">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimum">
-               <number>5</number>
-              </property>
-              <property name="maximum">
-               <number>60</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="microphone_send">
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="text">
-               <string>Send</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="use_voice">
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="text">
-               <string>Voice</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="whisper">
-              <property name="toolTip">
-               <string>Using openai key.</string>
-              </property>
-              <property name="text">
-               <string>Whisper</string>
               </property>
              </widget>
             </item>
@@ -508,6 +400,31 @@ p, li { white-space: pre-wrap; }
                 <string>code-cushman-001</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string>claude-3-5-sonnet-20241022</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>claude-3-5-haiku-20241022</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>claude-3-opus-20240229</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>claude-3-sonnet-20240229</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>claude-3-haiku-20240307</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item>
@@ -606,67 +523,6 @@ p, li { white-space: pre-wrap; }
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <item>
-             <widget class="QLabel" name="label_3">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Image size:        </string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="image_size">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::WheelFocus</enum>
-              </property>
-              <property name="sizeAdjustPolicy">
-               <enum>QComboBox::AdjustToContents</enum>
-              </property>
-              <item>
-               <property name="text">
-                <string>256x256</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>512x512</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>1024x1024</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_8">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <widget class="QLabel" name="label_2">
@@ -703,54 +559,28 @@ p, li { white-space: pre-wrap; }
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <layout class="QHBoxLayout" name="claude_api_layout">
             <item>
-             <widget class="QLabel" name="label_4">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QLabel" name="claude_label">
               <property name="toolTip">
-               <string>Please select PDF from Chat.</string>
+               <string>Claude API key for Anthropic models</string>
               </property>
               <property name="text">
-               <string>Use PDF file:       </string>
+               <string>&lt;a href=&quot;https://console.anthropic.com/&quot;&gt;Claude API key&lt;/a&gt; </string>
               </property>
               <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+              <property name="openExternalLinks">
                <bool>true</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="pdf_path">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string>Please select PDF from Chat.</string>
-              </property>
-             </widget>
+             <widget class="QgsPasswordLineEdit" name="claude_apikey"/>
             </item>
             <item>
-             <widget class="QToolButton" name="toolButton">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_7">
+             <spacer name="claude_spacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>

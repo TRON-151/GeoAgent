@@ -32,5 +32,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .qchatqpt import qchatgpt
-    return qchatgpt(iface)
+    from .geogenie import GeoGenie
+    return GeoGenie(iface)
