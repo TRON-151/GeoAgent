@@ -1,66 +1,44 @@
 # This file contains metadata for your plugin.
 
-# This file should be included when you package your plugin.# Mandatory items:
+# This file should be included when you package your plugin.
+# Mandatory items:
 
 [general]
-name=QChatGPT
-qgisMinimumVersion=3.0
-description=A plugin integration between QGIS and openai API.
-version=0.7
-author=Marios S. Kyriakou, KIOS Research and Innovation Center of Excellence (KIOS CoE)
-email=mariosmsk@gmail.com
+name=GeoGenie
+qgisMinimumVersion=3.10
+description=Prompt-Driven GeoAgent for QGIS - Natural language geospatial analysis with AI
+version=1.0.0
+author=Ahmad Abubakar Ahmad
+email=ahmad.abubakar@uni-muenster.de
 
-about=A plugin integration between QGIS and openai API. Displays the results from openai in QGIS.
+about=GeoGenie is a QGIS dock widget that accepts natural-language prompts to automatically execute PyQGIS Processing algorithms, invoke deep-learning segmentation, and convert workflows into reusable models. Built for modern geospatial AI workflows with support for OpenAI GPT and Anthropic Claude models. Features include: natural language to QGIS processing, AI-powered geospatial analysis, workflow automation, and provenance tracking.
 
-tracker=https://github.com/KIOS-Research/QChatGPT/issues
-repository=https://github.com/KIOS-Research/QChatGPT
+tracker=https://github.com/AhmadAbubakarAhmadA/Python_Course_IFGI_SOSe/issues
+repository=https://github.com/AhmadAbubakarAhmadA/Python_Course_IFGI_SOSe
 # End of mandatory metadata
 
 # Recommended items:
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-changelog=2023-07-02  QChatGPT 0.7:
-		 Use pdfgpt v0.2.2 / Update dependencies.
-	  2023-07-02  QChatGPT 0.6:
-		 Transfer repo to KIOS Research and Innovation Center of Excellence (KIOS CoE).
-		 Some fixes.
-		 Add pdfgpt package to talk with your pdf in QGIS.
-      2023-05-06  QChatGPT 0.5:
-		 Implement AI voice response feature.
-		 Add microphone button for input with a specified duration.
-		 Add option to stop voice response.
-		 Save the previous AI response for future reference.
-		 Enable execution of Python code and integration with the Python console.
-		 Support data input via links instead only of geoJSON files.
-		 Provide options for completing questions using QGIS and QCode.
-		 Allow users to edit the AI's response, for example, editing geoJSON files before adding them to the map.
-		 Incorporate Whisper models for speech-to-text transcription.
-	  2023-04-01  QChatGPT 0.4:
-		 Add the models gpt-3.5-turbo, gpt-3.5-turbo-0301 (you need to be using openai v0.27.0)
-		 Add installation notes for macOS (Thanks @gilles-morain)
-		 Adds context for last 6 interactions (Thanks @Ojaybee)
-		 Load UI fast.
-		 Add Image option to show image in chat.
-		 Add history command of questions (use Up/Down arrows).
-	  2023-02-20  QChatGPT 0.3:
-		 Remove plugin dependencies, confused with python dependencies (Thanks @Gustry).
-	  2023-02-14  QChatGPT 0.2:
-		 Install dependencies from code (test with ubuntu & windows).
-		 Output needs to include line breaks (Thanks @lymperis-e).
-		 Change the window from dialog to dockwidget.
-		 Use enter key to send the message. 
-		 Add tabs for Chat and Settings
-		 Add button to add geoJSON on map.
-			 
-# Tags are comma separated with spaces allowed
-tags=python,chatqpt,openai
+changelog=2025-01-21  GeoGenie 1.0.0:
+    • Initial release of GeoGenie - Prompt-Driven GeoAgent
+    • Natural language interface for QGIS Processing algorithms
+    • Support for both OpenAI (GPT-3.5, GPT-4) and Anthropic Claude models
+    • AI-powered geospatial workflow automation
+    • Context-aware prompting with active layer information
+    • Code generation for QGIS PyQt and Processing algorithms
+    • Simplified UI focused on core GeoAgent functionality
+    • Built-in workflow provenance and reproducibility features
 
-homepage=https://mariosmsk.com/2023/02/15/exploring-the-qchatgpt-plugin-in-qgis/
-category=Plugins
+# Tags are comma separated with spaces allowed
+tags=python,ai,geoprocessing,automation,natural-language,openai,claude,processing,workflows,geospatial,analysis
+
+homepage=https://github.com/AhmadAbubakarAhmadA/Python_Course_IFGI_SOSe
+category=Analysis
 icon=icon.png
 # experimental flag
-experimental=False
+experimental=True
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
@@ -70,9 +48,5 @@ deprecated=False
 # Check the documentation for more information.
 # plugin_dependencies=
 
-Category of the plugin: Raster, Vector, Database or Web
-# category=
-
 # If the plugin can run on QGIS Server.
 server=False
-
