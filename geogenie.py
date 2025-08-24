@@ -28,17 +28,15 @@ from .geogenie_dialog import GeoGenieDockWidget
 from .geogenie_coordinator import GeoGenieCoordinator
 from .install_packages.check_dependencies import check
 
-# Check API dependencies
+# Check API dependencies (only the ones we actually need)
 API_EXIST = False
 try:
-    check(['openai', 'anthropic'])
-finally:
-    try:
-        import openai
-        import anthropic
-        API_EXIST = True
-    except ImportError:
-        pass
+    import openai
+    import anthropic
+    API_EXIST = True
+except ImportError:
+    # Will show error message to user when they try to use the plugin
+    pass
 
 
 class GeoGenie:

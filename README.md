@@ -1,37 +1,53 @@
-![QChatGPT Downloads](https://img.shields.io/badge/dynamic/json?formatter=metric&color=green&label=QChatGPT-downloads&query=%24.QChatGPT.downloads&url=https://raw.githubusercontent.com/Mariosmsk/qgis-plugins-downloads/main/data/plugins.json)
+# GeoGenie
 
+GeoGenie is a QGIS plugin that provides natural language processing for geospatial analysis using OpenAI GPT and Anthropic Claude models.
 
-# QChatGPT
-A plugin integration between QGIS and openai API. Displays the results from openai in QGIS.
+**Phase 1 Features:**
+- Natural language to QGIS processing workflow
+- Support for buffer, clip, reproject, dissolve, and intersection algorithms
+- Parameter validation and user confirmation dialogs
+- Real-time progress feedback
+- Memory layer creation for algorithm outputs
 
-Source: https://openai.com/
-
-QChatGPT: Speak with AI<p>
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=Uo1gdf0eH7o
-" target="_blank"><img src="http://img.youtube.com/vi/Uo1gdf0eH7o/0.jpg"
-alt="QChatGPT: Speak with AI" width="240" height="180" border="5" /></a>
-
-![https://github.com/Mariosmsk/QChatGPT/blob/main/example.png](https://github.com/Mariosmsk/QChatGPT/blob/main/example.png)
-
-![https://github.com/Mariosmsk/QChatGPT/blob/main/example2.png](https://github.com/Mariosmsk/QChatGPT/blob/main/example2.png)
-
-![https://github.com/Mariosmsk/QChatGPT/blob/main/example3.png](https://github.com/Mariosmsk/QChatGPT/blob/main/example3.png)
-
-## Installation notes
+## Installation
 
 ### Dependencies
+
+GeoGenie requires only two essential packages:
+
+```bash
+pip install openai>=1.0.0
+pip install anthropic>=0.18.0
 ```
-pip install openai 
-pip install SpeechRecognition 
-pip install pyaudio 
-pip install pyttsx3
-pip install pdfgpt
-```
+
+### QGIS Installation
+
+1. Download the plugin and place it in your QGIS plugins directory
+2. Enable the plugin in QGIS Plugin Manager
+3. The plugin will automatically prompt to install missing dependencies
 
 ### macOS + QGIS 3
 
-* in a macOS shell window, run
+In a macOS shell window, run:
 
+```bash
+/Applications/QGIS.app/Contents/MacOS/bin/python3 -m pip install openai>=1.0.0 anthropic>=0.18.0
 ```
-/Applications/QGIS.app/Contents/MacOS/bin/python3 -m pip install openai
-```
+
+## Usage
+
+1. Launch the GeoGenie plugin from the QGIS toolbar
+2. Enter your OpenAI or Claude API key
+3. Type natural language requests like:
+   - "Create a 100 meter buffer around the schools layer"
+   - "Clip the buildings layer with the city boundary"
+   - "Reproject the roads layer to EPSG:4326"
+
+The plugin will interpret your request, validate parameters, and execute the corresponding QGIS processing algorithm.
+
+## API Keys
+
+- OpenAI API key: Get from https://platform.openai.com/account/api-keys
+- Claude API key: Get from https://console.anthropic.com/
+
+API keys are stored locally and encrypted for security.
