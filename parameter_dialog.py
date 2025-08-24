@@ -125,6 +125,11 @@ class ParameterConfirmationDialog(QDialog):
                 widget = QCheckBox()
                 widget.setChecked(bool(param_value) if param_value is not None else False)
                 return widget
+            elif param_type == 'output':
+                widget = QLineEdit()
+                widget.setText(str(param_value) if param_value is not None else "memory:temp_output")
+                widget.setPlaceholderText("e.g., memory:output, /path/to/output.shp")
+                return widget
             else:
                 widget = QLineEdit()
                 widget.setText(str(param_value) if param_value is not None else "")
@@ -163,6 +168,9 @@ class ParameterConfirmationDialog(QDialog):
                     current_params[param_name] = widget.value()
                 elif param_type == 'boolean':
                     current_params[param_name] = widget.isChecked()
+                elif param_type == 'output':
+                    text = widget.text().strip()
+                    current_params[param_name] = text if text else "memory:temp_output"
                 else:
                     text = widget.text().strip()
                     if text:

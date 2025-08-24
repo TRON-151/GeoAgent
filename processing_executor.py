@@ -232,7 +232,7 @@ class AlgorithmRegistry:
             "name": "Buffer",
             "description": "Create buffer zones around geometries",
             "required_params": ["INPUT", "DISTANCE"],
-            "optional_params": ["SEGMENTS", "END_CAP_STYLE", "JOIN_STYLE", "MITER_LIMIT", "DISSOLVE"],
+            "optional_params": ["SEGMENTS", "END_CAP_STYLE", "JOIN_STYLE", "MITER_LIMIT", "DISSOLVE", "OUTPUT"],
             "param_types": {
                 "INPUT": "layer",
                 "DISTANCE": "number",
@@ -240,14 +240,16 @@ class AlgorithmRegistry:
                 "END_CAP_STYLE": "enum",
                 "JOIN_STYLE": "enum", 
                 "MITER_LIMIT": "number",
-                "DISSOLVE": "boolean"
+                "DISSOLVE": "boolean",
+                "OUTPUT": "output"
             },
             "param_defaults": {
                 "SEGMENTS": 5,
                 "END_CAP_STYLE": 0,  # Round
                 "JOIN_STYLE": 0,     # Round
                 "MITER_LIMIT": 2.0,
-                "DISSOLVE": False
+                "DISSOLVE": False,
+                "OUTPUT": "memory:temp_output"
             }
         },
         
@@ -256,12 +258,15 @@ class AlgorithmRegistry:
             "name": "Clip",
             "description": "Clip vector layer by overlay layer",
             "required_params": ["INPUT", "OVERLAY"],
-            "optional_params": [],
+            "optional_params": ["OUTPUT"],
             "param_types": {
                 "INPUT": "layer",
-                "OVERLAY": "layer"
+                "OVERLAY": "layer",
+                "OUTPUT": "output"
             },
-            "param_defaults": {}
+            "param_defaults": {
+                "OUTPUT": "memory:temp_output"
+            }
         },
         
         "reproject": {
@@ -269,13 +274,16 @@ class AlgorithmRegistry:
             "name": "Reproject Layer",
             "description": "Reproject layer to different CRS",
             "required_params": ["INPUT", "TARGET_CRS"],
-            "optional_params": ["OPERATION"],
+            "optional_params": ["OPERATION", "OUTPUT"],
             "param_types": {
                 "INPUT": "layer",
                 "TARGET_CRS": "crs",
-                "OPERATION": "string"
+                "OPERATION": "string",
+                "OUTPUT": "output"
             },
-            "param_defaults": {}
+            "param_defaults": {
+                "OUTPUT": "memory:temp_output"
+            }
         },
         
         "dissolve": {
@@ -283,12 +291,15 @@ class AlgorithmRegistry:
             "name": "Dissolve",
             "description": "Dissolve geometries based on attributes",
             "required_params": ["INPUT"],
-            "optional_params": ["FIELD"],
+            "optional_params": ["FIELD", "OUTPUT"],
             "param_types": {
                 "INPUT": "layer",
-                "FIELD": "field"
+                "FIELD": "field",
+                "OUTPUT": "output"
             },
-            "param_defaults": {}
+            "param_defaults": {
+                "OUTPUT": "memory:temp_output"
+            }
         },
         
         "intersection": {
@@ -296,14 +307,17 @@ class AlgorithmRegistry:
             "name": "Intersection", 
             "description": "Calculate intersection between two layers",
             "required_params": ["INPUT", "OVERLAY"],
-            "optional_params": ["INPUT_FIELDS", "OVERLAY_FIELDS"],
+            "optional_params": ["INPUT_FIELDS", "OVERLAY_FIELDS", "OUTPUT"],
             "param_types": {
                 "INPUT": "layer",
                 "OVERLAY": "layer", 
                 "INPUT_FIELDS": "field_list",
-                "OVERLAY_FIELDS": "field_list"
+                "OVERLAY_FIELDS": "field_list",
+                "OUTPUT": "output"
             },
-            "param_defaults": {}
+            "param_defaults": {
+                "OUTPUT": "memory:temp_output"
+            }
         }
     }
     

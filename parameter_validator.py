@@ -149,6 +149,8 @@ class ParameterValidator:
                 return self._validate_field_parameter(param_name, param_value)
             elif param_type == 'field_list':
                 return self._validate_field_list_parameter(param_name, param_value)
+            elif param_type == 'output':
+                return self._validate_output_parameter(param_name, param_value)
             else:
                 return self._validate_string_parameter(param_name, param_value)
                 
@@ -453,6 +455,39 @@ class ParameterValidator:
             'valid': True,
             'value': fields,
             'warning': '; '.join(warnings) if warnings else None
+        }
+    
+    def _validate_output_parameter(self, param_name: str, param_value: Any) -> Dict[str, Any]:
+        """Validate output parameter"""
+        
+        if not isinstance(param_value, str):
+            return {
+                'valid': False,
+                'error': f"{param_name}: Output path must be a string",
+                'value': param_value
+            }
+        
+        # Accept memory layers, temporary files, or absolute paths
+        if param_value.startswith('memory:') or param_value.startswith('temp:') or param_value.startswith('/'):
+            return {
+                'valid': True,
+                'value': param_value,
+                'warning': None
+            }
+        
+        # If it's just a filename, make it a memory layer
+        if not param_value.startswith(('/', 'C:', 'memory:', 'temp:')):
+            memory_path = f"memory:{param_value}"
+            return {
+                'valid': True,
+                'value': memory_path,
+                'warning': f"Converted output to memory layer: {memory_path}"
+            }
+        
+        return {
+            'valid': True,
+            'value': param_value,
+            'warning': None
         }
     
     def _validate_string_parameter(self, param_name: str, param_value: Any) -> Dict[str, Any]:
