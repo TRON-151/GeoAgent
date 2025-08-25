@@ -215,6 +215,8 @@ class GeoGenieCoordinator(QObject):
     def _on_processing_completed(self, result: Dict[str, Any]):
         """Handle successful algorithm completion"""
         
+        QgsMessageLog.logMessage(f"🎉 Processing completed signal received with result: {result}", 'GeoGenie', Qgis.Info)
+        
         try:
             self._hide_progress()
             
@@ -224,6 +226,7 @@ class GeoGenieCoordinator(QObject):
                 self.processing_error.emit(error_msg)
                 return
             
+            QgsMessageLog.logMessage("Adding result layers to map...", 'GeoGenie', Qgis.Info)
             # Add result layers to map
             self._add_result_layers_to_map(result)
             
@@ -272,25 +275,62 @@ class GeoGenieCoordinator(QObject):
             output_layers = result.get('output_layers', [])
             
             for layer_info in output_layers:
-                layer_path = layer_info.get('path')
-                if layer_path:
-                    # Generate layer name
+                # Check if we have a layer object directly
+                if 'layer_object' in layer_info:
+                    # We have the actual layer object from processing
+                    layer = layer_info['layer_object']
+                    original_name = layer_info.get('layer_name', 'temp_output')
+                    
+                    # Generate a proper GeoGenie layer name
                     layer_name = self._generate_result_layer_name(layer_info, result)
                     
-                    # Load layer
-                    if layer_info.get('type') == 'vector':
-                        from qgis.core import QgsVectorLayer
-                        layer = QgsVectorLayer(layer_path, layer_name, 'ogr')
-                    else:
-                        from qgis.core import QgsRasterLayer
-                        layer = QgsRasterLayer(layer_path, layer_name)
+                    # Set the proper name on the layer
+                    layer.setName(layer_name)
+                    
+                    QgsMessageLog.logMessage(f"Adding layer object directly: {layer_name}", 'GeoGenie', Qgis.Info)
                     
                     if layer.isValid():
+                        # Add the existing layer object to the project
                         QgsProject.instance().addMapLayer(layer)
-                        QgsMessageLog.logMessage(f"Added result layer: {layer_name}", 'GeoGenie', Qgis.Info)
+                        QgsMessageLog.logMessage(f"✅ Successfully added result layer: {layer_name} ({layer.featureCount()} features)", 'GeoGenie', Qgis.Info)
+                        
+                        # Force refresh the map canvas
+                        if iface:
+                            iface.mapCanvas().refresh()
+                            QgsMessageLog.logMessage("Map canvas refreshed", 'GeoGenie', Qgis.Info)
                     else:
-                        QgsMessageLog.logMessage(f"Failed to load result layer: {layer_path}", 
-                                               'GeoGenie', Qgis.Warning)
+                        QgsMessageLog.logMessage(f"❌ Layer object is invalid: {layer_name}", 'GeoGenie', Qgis.Warning)
+                        
+                else:
+                    # Fallback to path-based loading (original method)
+                    layer_path = layer_info.get('path')
+                    if layer_path:
+                        # Generate layer name
+                        layer_name = self._generate_result_layer_name(layer_info, result)
+                        
+                        # Load layer with improved handling
+                        QgsMessageLog.logMessage(f"Attempting to load layer from path: {layer_path}", 'GeoGenie', Qgis.Info)
+                        
+                        if layer_info.get('type') == 'vector':
+                            from qgis.core import QgsVectorLayer
+                            # Try different providers for memory layers
+                            if layer_path.startswith('memory:'):
+                                layer = QgsVectorLayer(layer_path, layer_name, 'memory')
+                            else:
+                                layer = QgsVectorLayer(layer_path, layer_name, 'ogr')
+                        else:
+                            from qgis.core import QgsRasterLayer
+                            layer = QgsRasterLayer(layer_path, layer_name)
+                        
+                        if layer.isValid():
+                            QgsProject.instance().addMapLayer(layer)
+                            QgsMessageLog.logMessage(f"✅ Successfully added result layer: {layer_name} (path: {layer_path})", 'GeoGenie', Qgis.Info)
+                            
+                            # Force refresh the map canvas
+                            if iface:
+                                iface.mapCanvas().refresh()
+                        else:
+                            QgsMessageLog.logMessage(f"❌ Failed to load result layer: {layer_path} - Layer invalid", 'GeoGenie', Qgis.Warning)
             
         except Exception as e:
             QgsMessageLog.logMessage(f"Error adding result layers: {str(e)}", 'GeoGenie', Qgis.Warning)

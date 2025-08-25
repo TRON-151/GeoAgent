@@ -413,3 +413,37 @@ class ContextManager:
                 summary += f" (and {len(visible_layers)-5} more)"
         
         return summary
+    
+    def ensure_spatial_indexes(self) -> Dict[str, bool]:
+        """
+        Proactively create spatial indexes for all vector layers in the project
+        
+        Returns:
+            Dictionary mapping layer names to index creation success status
+        """
+        results = {}
+        
+        try:
+            layers = self.project.mapLayers().values()
+            
+            for layer in layers:
+                if isinstance(layer, QgsVectorLayer) and layer.isValid():
+                    layer_name = layer.name()
+                    
+                    if not layer.hasSpatialIndex():
+                        QgsMessageLog.logMessage(f"Creating spatial index for: {layer_name}", 'GeoGenie', Qgis.Info)
+                        success = layer.createSpatialIndex()
+                        results[layer_name] = success
+                        
+                        if success:
+                            QgsMessageLog.logMessage(f"✅ Spatial index created for: {layer_name}", 'GeoGenie', Qgis.Info)
+                        else:
+                            QgsMessageLog.logMessage(f"⚠️ Failed to create spatial index for: {layer_name}", 'GeoGenie', Qgis.Warning)
+                    else:
+                        QgsMessageLog.logMessage(f"Spatial index already exists for: {layer_name}", 'GeoGenie', Qgis.Info)
+                        results[layer_name] = True
+                        
+        except Exception as e:
+            QgsMessageLog.logMessage(f"Error in bulk spatial index creation: {str(e)}", 'GeoGenie', Qgis.Warning)
+        
+        return results
