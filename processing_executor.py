@@ -11,7 +11,7 @@
  ***************************************************************************/
 """
 
-from qgis.PyQt.QtCore import QThread, pyqtSignal, QObject
+from qgis.PyQt.QtCore import QObject, pyqtSignal
 from qgis.core import (
     QgsProcessingFeedback, 
     QgsProcessingContext,
@@ -19,23 +19,28 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
     QgsMessageLog,
-    Qgis
+    Qgis,
+    QgsTask,
+    QgsApplication
 )
 import processing
 from typing import Dict, Any, Optional, List
 
 
-class ProcessingFeedbackHandler(QgsProcessingFeedback):
-    """Custom feedback handler for processing operations"""
+class ProcessingTaskFeedback(QgsProcessingFeedback):
+    """Task-safe feedback handler for processing operations"""
     
-    def __init__(self, progress_callback=None):
+    def __init__(self, task: QgsTask):
         super().__init__()
-        self.progress_callback = progress_callback
+        self.task = task
         
     def setProgress(self, progress):
         super().setProgress(progress)
-        if self.progress_callback:
-            self.progress_callback(progress)
+        if self.task and not self.task.isCanceled():
+            self.task.setProgress(progress)
+    
+    def isCanceled(self) -> bool:
+        return self.task.isCanceled() if self.task else super().isCanceled()
     
     def pushInfo(self, info):
         super().pushInfo(info)
@@ -50,110 +55,141 @@ class ProcessingFeedbackHandler(QgsProcessingFeedback):
         QgsMessageLog.logMessage(f"Command: {info}", 'GeoGenie', Qgis.Info)
 
 
-class ProcessingExecutor(QThread):
+class ProcessingTask(QgsTask):
     """
-    Asynchronous QGIS processing algorithm executor
+    QGIS Task for safe background processing algorithm execution
     
-    Handles execution of QGIS processing algorithms in background thread
-    with progress feedback and result handling.
+    Uses QGIS Task framework for proper threading and memory management.
     """
     
-    # Signals
-    progress_updated = pyqtSignal(int, str)  # progress percentage, status message
-    algorithm_finished = pyqtSignal(dict)    # result dictionary
-    error_occurred = pyqtSignal(str)         # error message
-    
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.algorithm_id = None
-        self.parameters = None
-        self.context = None
-        self.feedback = None
+    def __init__(self, algorithm_id: str, parameters: Dict[str, Any], 
+                 context: Optional[QgsProcessingContext] = None, description: str = "Processing"):
+        super().__init__(description, QgsTask.CanCancel)
         
-    def run_algorithm(self, algorithm_id: str, parameters: Dict[str, Any], 
-                     context: Optional[QgsProcessingContext] = None):
-        """
-        Set up algorithm execution parameters
-        
-        Args:
-            algorithm_id: QGIS processing algorithm ID (e.g., 'native:buffer')
-            parameters: Algorithm parameters dictionary
-            context: Processing context (optional)
-        """
+        # Copy data for thread safety
         self.algorithm_id = algorithm_id
-        self.parameters = parameters
+        self.parameters = parameters.copy()  # Make a copy to avoid thread issues
         self.context = context or QgsProcessingContext()
+        self.result = None
+        self.error_message = None
         
-        # Set up project context
+        # Set up context safely
         self.context.setProject(QgsProject.instance())
         
-        # Start the thread
-        self.start()
-    
-    def run(self):
-        """Execute the algorithm in background thread"""
+    def run(self) -> bool:
+        """Execute the algorithm in background task"""
         try:
-            # Create feedback handler
-            self.feedback = ProcessingFeedbackHandler(
-                progress_callback=self._on_progress_changed
-            )
-            
-            # Emit initial progress
-            self.progress_updated.emit(0, f"Starting {self.algorithm_id}...")
+            # Create feedback handler that works with task progress
+            feedback = ProcessingTaskFeedback(self)
             
             # Validate algorithm exists
             if not self._validate_algorithm():
-                return
+                return False
+            
+            # Update progress
+            self.setProgress(10)
+            
+            # Create spatial indexes for input layers to improve performance
+            self._create_spatial_indexes()
+            
+            # Update progress after spatial indexing
+            self.setProgress(20)
             
             # Execute the algorithm
-            self.progress_updated.emit(10, "Executing algorithm...")
-            
             result = processing.run(
                 self.algorithm_id,
                 self.parameters,
                 context=self.context,
-                feedback=self.feedback
+                feedback=feedback
             )
             
-            # Check if operation was cancelled
-            if self.feedback.isCanceled():
-                self.error_occurred.emit("Operation was cancelled")
-                return
+            # Check if task was cancelled
+            if self.isCanceled():
+                return False
             
-            # Process results
-            self.progress_updated.emit(90, "Processing results...")
-            processed_result = self._process_results(result)
+            # Update progress
+            self.setProgress(90)
             
-            # Emit completion
-            self.progress_updated.emit(100, "Algorithm completed successfully")
-            self.algorithm_finished.emit(processed_result)
+            # Process results safely
+            self.result = self._process_results(result)
+            
+            # Final progress update
+            self.setProgress(100)
+            
+            return True
             
         except Exception as e:
-            error_msg = f"Error executing {self.algorithm_id}: {str(e)}"
-            QgsMessageLog.logMessage(error_msg, 'GeoGenie', Qgis.Critical)
-            self.error_occurred.emit(error_msg)
+            self.error_message = f"Error executing {self.algorithm_id}: {str(e)}"
+            QgsMessageLog.logMessage(self.error_message, 'GeoGenie', Qgis.Critical)
+            return False
+    
+    def finished(self, success: bool):
+        """Called when task finishes (runs in main thread)"""
+        if success and self.result:
+            # Task completed successfully
+            pass
+        elif self.error_message:
+            # Task failed with error
+            pass
+        # Results will be handled by ProcessingExecutor
     
     def _validate_algorithm(self) -> bool:
         """Validate that the algorithm exists and is available"""
         try:
-            from qgis.core import QgsApplication
             registry = QgsApplication.processingRegistry()
             
             if not registry.algorithmById(self.algorithm_id):
-                error_msg = f"Algorithm '{self.algorithm_id}' not found"
-                self.error_occurred.emit(error_msg)
+                self.error_message = f"Algorithm '{self.algorithm_id}' not found"
+                QgsMessageLog.logMessage(self.error_message, 'GeoGenie', Qgis.Critical)
                 return False
             
             return True
             
         except Exception as e:
-            error_msg = f"Error validating algorithm: {str(e)}"
-            self.error_occurred.emit(error_msg)
+            self.error_message = f"Error validating algorithm: {str(e)}"
+            QgsMessageLog.logMessage(self.error_message, 'GeoGenie', Qgis.Critical)
             return False
     
-    def _on_progress_changed(self, progress: float):
-        """Handle progress updates from feedback"""
-        self.progress_updated.emit(int(progress), f"Processing... {progress:.1f}%")
+    def _create_spatial_indexes(self):
+        """Create spatial indexes for input layers to improve performance"""
+        try:
+            from qgis.core import QgsProject
+            
+            # Get all input layer parameters
+            input_params = ['INPUT', 'OVERLAY', 'LAYER', 'SOURCE_LAYER', 'TARGET_LAYER']
+            
+            for param_name in input_params:
+                if param_name in self.parameters:
+                    layer_id = self.parameters[param_name]
+                    
+                    # Get the layer from the project
+                    layer = QgsProject.instance().mapLayer(layer_id)
+                    
+                    if layer and hasattr(layer, 'createSpatialIndex'):
+                        # Check if layer already has a spatial index
+                        if not layer.hasSpatialIndex():
+                            QgsMessageLog.logMessage(f"Creating spatial index for layer: {layer.name()}", 'GeoGenie', Qgis.Info)
+                            
+                            # Create spatial index
+                            success = layer.createSpatialIndex()
+                            
+                            if success:
+                                QgsMessageLog.logMessage(f"✅ Spatial index created for: {layer.name()}", 'GeoGenie', Qgis.Info)
+                            else:
+                                QgsMessageLog.logMessage(f"⚠️ Failed to create spatial index for: {layer.name()}", 'GeoGenie', Qgis.Warning)
+                        else:
+                            QgsMessageLog.logMessage(f"Spatial index already exists for: {layer.name()}", 'GeoGenie', Qgis.Info)
+                            
+        except Exception as e:
+            QgsMessageLog.logMessage(f"Error creating spatial indexes: {str(e)}", 'GeoGenie', Qgis.Warning)
+    
+    def get_result(self) -> Optional[Dict[str, Any]]:
+        """Get the processing result"""
+        return self.result
+    
+    def get_error(self) -> Optional[str]:
+        """Get error message if task failed"""
+        return self.error_message
     
     def _process_results(self, result: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -177,12 +213,32 @@ class ProcessingExecutor(QThread):
         # Extract output layers
         for key, value in result.items():
             if key.startswith('OUTPUT') or key == 'OUTPUT':
-                if isinstance(value, str) and (value.startswith('memory:') or 
-                                              value.endswith(('.shp', '.gpkg', '.geojson'))):
+                if isinstance(value, str):
+                    # Handle string paths (memory layers or file paths)
+                    layer_path = value
+                    if not value.startswith('memory:') and not value.startswith('/') and not ':' in value:
+                        # It's likely a memory layer ID, add the memory: prefix
+                        layer_path = f"memory:{value}"
+                    
                     processed_result['output_layers'].append({
                         'parameter': key,
-                        'path': value,
+                        'path': layer_path,
                         'type': 'vector'
+                    })
+                elif hasattr(value, 'source') and hasattr(value, 'name'):
+                    # Handle QgsVectorLayer or QgsRasterLayer objects directly
+                    layer_source = value.source()
+                    layer_name = value.name()
+                    
+                    QgsMessageLog.logMessage(f"Found layer object: {layer_name}, source: {layer_source}", 'GeoGenie', Qgis.Info)
+                    
+                    # Store the layer object directly for immediate use
+                    processed_result['output_layers'].append({
+                        'parameter': key,
+                        'path': layer_source,
+                        'layer_object': value,  # Store the actual layer object
+                        'layer_name': layer_name,
+                        'type': 'vector' if 'Vector' in str(type(value)) else 'raster'
                     })
         
         # Add layer statistics if available
@@ -213,14 +269,106 @@ class ProcessingExecutor(QThread):
                 QgsMessageLog.logMessage(f"Error getting layer statistics: {str(e)}", 
                                        'GeoGenie', Qgis.Warning)
     
-    def cancel_execution(self):
-        """Cancel the running algorithm"""
-        if self.feedback:
-            self.feedback.cancel()
+
+class ProcessingExecutor(QObject):
+    """
+    Safe processing algorithm executor using QGIS Task framework
+    
+    Manages background execution of QGIS processing algorithms with proper
+    threading, progress feedback, and memory management.
+    """
+    
+    # Signals
+    progress_updated = pyqtSignal(int, str)  # progress percentage, status message
+    algorithm_finished = pyqtSignal(dict)    # result dictionary
+    error_occurred = pyqtSignal(str)         # error message
+    
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.current_task = None
         
-        if self.isRunning():
-            self.terminate()
-            self.wait(3000)  # Wait up to 3 seconds for clean termination
+    def run_algorithm(self, algorithm_id: str, parameters: Dict[str, Any], 
+                     context: Optional[QgsProcessingContext] = None):
+        """
+        Execute algorithm using QGIS Task framework
+        
+        Args:
+            algorithm_id: QGIS processing algorithm ID (e.g., 'native:buffer')
+            parameters: Algorithm parameters dictionary
+            context: Processing context (optional)
+        """
+        try:
+            # Cancel any existing task
+            if self.current_task:
+                self.cancel_execution()
+            
+            # Create description
+            algorithm_info = AlgorithmRegistry.get_algorithm_by_id(algorithm_id)
+            description = algorithm_info['name'] if algorithm_info else algorithm_id
+            
+            # Create task
+            self.current_task = ProcessingTask(
+                algorithm_id=algorithm_id,
+                parameters=parameters,
+                context=context,
+                description=f"GeoGenie: {description}"
+            )
+            
+            # Connect task signals
+            self.current_task.progressChanged.connect(self._on_progress_changed)
+            self.current_task.taskCompleted.connect(self._on_task_completed)
+            self.current_task.taskTerminated.connect(self._on_task_terminated)
+            
+            # Submit task to task manager
+            QgsApplication.taskManager().addTask(self.current_task)
+            
+            # Emit initial progress
+            self.progress_updated.emit(0, f"Starting {description}...")
+            
+        except Exception as e:
+            error_msg = f"Error starting algorithm: {str(e)}"
+            QgsMessageLog.logMessage(error_msg, 'GeoGenie', Qgis.Critical)
+            self.error_occurred.emit(error_msg)
+    
+    def _on_progress_changed(self):
+        """Handle task progress updates"""
+        if self.current_task:
+            progress = self.current_task.progress()
+            message = f"Processing... {progress:.1f}%"
+            self.progress_updated.emit(int(progress), message)
+    
+    def _on_task_completed(self):
+        """Handle task completion"""
+        QgsMessageLog.logMessage("Task completed signal received", 'GeoGenie', Qgis.Info)
+        
+        if self.current_task:
+            result = self.current_task.get_result()
+            error = self.current_task.get_error()
+            
+            QgsMessageLog.logMessage(f"Task result: {result}", 'GeoGenie', Qgis.Info)
+            QgsMessageLog.logMessage(f"Task error: {error}", 'GeoGenie', Qgis.Info)
+            
+            if result:
+                QgsMessageLog.logMessage("Emitting algorithm_finished signal", 'GeoGenie', Qgis.Info)
+                self.algorithm_finished.emit(result)
+            else:
+                QgsMessageLog.logMessage("Emitting error_occurred signal", 'GeoGenie', Qgis.Info)
+                self.error_occurred.emit(error or "Unknown processing error")
+            
+            self.current_task = None
+        else:
+            QgsMessageLog.logMessage("No current task found in completion handler", 'GeoGenie', Qgis.Warning)
+    
+    def _on_task_terminated(self):
+        """Handle task termination/cancellation"""
+        self.error_occurred.emit("Processing was cancelled or terminated")
+        self.current_task = None
+    
+    def cancel_execution(self):
+        """Cancel the running task"""
+        if self.current_task:
+            self.current_task.cancel()
+            self.current_task = None
 
 
 class AlgorithmRegistry:

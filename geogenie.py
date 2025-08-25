@@ -28,15 +28,21 @@ from .geogenie_dialog import GeoGenieDockWidget
 from .geogenie_coordinator import GeoGenieCoordinator
 from .install_packages.check_dependencies import check
 
-# Check API dependencies (only the ones we actually need)
+# Check API dependencies with detailed error reporting
 API_EXIST = False
+MISSING_PACKAGES = []
+
 try:
     import openai
+except ImportError as e:
+    MISSING_PACKAGES.append(f"openai (error: {str(e)})")
+
+try:
     import anthropic
-    API_EXIST = True
-except ImportError:
-    # Will show error message to user when they try to use the plugin
-    pass
+except ImportError as e:
+    MISSING_PACKAGES.append(f"anthropic (error: {str(e)})")
+
+API_EXIST = len(MISSING_PACKAGES) == 0
 
 
 class GeoGenie:
@@ -78,6 +84,13 @@ class GeoGenie:
         self.history = deque(maxlen=6)
         
         QgsMessageLog.logMessage("GeoGenie plugin initialized", 'GeoGenie', Qgis.Info)
+        
+        # Debug: Log Python path and package availability
+        import sys
+        QgsMessageLog.logMessage(f"Python path: {sys.executable}", 'GeoGenie', Qgis.Info)
+        QgsMessageLog.logMessage(f"API packages available: {API_EXIST}", 'GeoGenie', Qgis.Info)
+        if MISSING_PACKAGES:
+            QgsMessageLog.logMessage(f"Missing packages: {MISSING_PACKAGES}", 'GeoGenie', Qgis.Warning)
 
     def tr(self, message):
         """Get translation for a string using Qt translation API"""
@@ -155,12 +168,102 @@ class GeoGenie:
             'claude-3-haiku-20240307'
         ]
         return model in claude_models
+    
+    def test_dependencies(self):
+        """Test and report package installation status"""
+        import sys
+        import subprocess
+        
+        report = ["=== GeoGenie Dependency Test ==="]
+        report.append(f"Python executable: {sys.executable}")
+        report.append(f"Python version: {sys.version}")
+        report.append("")
+        
+        # Test each package individually
+        for package_name in ['openai', 'anthropic']:
+            try:
+                if package_name == 'openai':
+                    import openai
+                    report.append(f"✅ {package_name}: {openai.__version__}")
+                elif package_name == 'anthropic':
+                    import anthropic
+                    report.append(f"✅ {package_name}: {anthropic.__version__}")
+            except ImportError as e:
+                report.append(f"❌ {package_name}: {str(e)}")
+                # Try to get more info
+                try:
+                    result = subprocess.run([sys.executable, '-m', 'pip', 'show', package_name], 
+                                          capture_output=True, text=True, timeout=10)
+                    if result.returncode == 0:
+                        report.append(f"   Pip shows: {result.stdout.split('Version:')[1].split('\\n')[0].strip()}")
+                    else:
+                        report.append(f"   Not installed via pip")
+                except Exception:
+                    report.append(f"   Could not check pip status")
+        
+        report_text = "\n".join(report)
+        QgsMessageLog.logMessage(report_text, 'GeoGenie', Qgis.Info)
+        self.showMessage("GeoGenie Dependency Test", report_text, "OK", "Info")
+        return report_text
+
+    def create_spatial_indexes(self):
+        """Create spatial indexes for all vector layers to improve performance"""
+        try:
+            from .context_manager import ContextManager
+            
+            # Show progress
+            self.dlg.chatgpt_ans.append("\n🔧 Creating spatial indexes for all vector layers...")
+            
+            # Create context manager and run spatial indexing
+            context_manager = ContextManager()
+            results = context_manager.ensure_spatial_indexes()
+            
+            # Count results
+            total_layers = len(results)
+            successful = sum(1 for success in results.values() if success)
+            failed = total_layers - successful
+            
+            # Report results
+            if total_layers == 0:
+                self.dlg.chatgpt_ans.append("ℹ️ No vector layers found in the project.")
+            else:
+                self.dlg.chatgpt_ans.append(f"\n✅ Spatial Index Creation Complete:")
+                self.dlg.chatgpt_ans.append(f"   • Total layers processed: {total_layers}")
+                self.dlg.chatgpt_ans.append(f"   • Successfully indexed: {successful}")
+                if failed > 0:
+                    self.dlg.chatgpt_ans.append(f"   • Failed: {failed}")
+                
+                self.dlg.chatgpt_ans.append(f"\n🚀 Performance should be improved for spatial operations!")
+                
+                # List layers with new indexes
+                new_indexes = [name for name, success in results.items() if success]
+                if new_indexes:
+                    self.dlg.chatgpt_ans.append(f"\nLayers with spatial indexes:")
+                    for layer_name in new_indexes[:5]:  # Show first 5
+                        self.dlg.chatgpt_ans.append(f"   • {layer_name}")
+                    if len(new_indexes) > 5:
+                        self.dlg.chatgpt_ans.append(f"   • ... and {len(new_indexes)-5} more")
+            
+            # Scroll to bottom
+            self.dlg.chatgpt_ans.verticalScrollBar().setValue(
+                self.dlg.chatgpt_ans.verticalScrollBar().maximum()
+            )
+            
+        except Exception as e:
+            error_msg = f"Error creating spatial indexes: {str(e)}"
+            QgsMessageLog.logMessage(error_msg, 'GeoGenie', Qgis.Critical)
+            self.dlg.chatgpt_ans.append(f"\n❌ Error: {str(e)}")
 
     def send_message(self):
         """Process natural language message using GeoGenie Phase 1"""
         
         if not API_EXIST:
-            self.showMessage("GeoGenie", "Please install required packages: openai, anthropic", "OK", "Warning")
+            if MISSING_PACKAGES:
+                error_msg = "Missing required packages:\n\n" + "\n".join(MISSING_PACKAGES)
+                error_msg += "\n\nPlease install using:\npip install openai>=1.0.0 anthropic>=0.18.0"
+            else:
+                error_msg = "Unable to import required packages: openai, anthropic\n\nPlease install using:\npip install openai>=1.0.0 anthropic>=0.18.0"
+            self.showMessage("GeoGenie - Missing Dependencies", error_msg, "OK", "Warning")
             self._enable_ui()
             return
 
@@ -171,6 +274,18 @@ class GeoGenie:
             # Get user input
             question = self.dlg.question.text().strip()
             if not question:
+                self._enable_ui()
+                return
+            
+            # Handle special commands
+            if question == "!test":
+                self.test_dependencies()
+                self.dlg.question.setText('')
+                self._enable_ui()
+                return
+            elif question == "!index" or question == "!spatial-index":
+                self.create_spatial_indexes()
+                self.dlg.question.setText('')
                 self._enable_ui()
                 return
 
@@ -372,7 +487,8 @@ class GeoGenie:
 
         # Initialize answers
         self.questions = []
-        self.answers = ['Welcome to GeoGenie - Your AI-Powered Geospatial Assistant.\n\nPhase 1 Features:\n• Natural language QGIS processing\n• Buffer, clip, reproject, dissolve, intersection\n• Parameter validation and confirmation\n• Real-time progress feedback']
+        dependency_status = "✅ Dependencies OK" if API_EXIST else f"❌ Missing: {', '.join(MISSING_PACKAGES[:2])}"
+        self.answers = [f'Welcome to GeoGenie - Your AI-Powered Geospatial Assistant.\n\nPhase 1 Features:\n• Natural language QGIS processing\n• Buffer, clip, reproject, dissolve, intersection\n• Parameter validation and confirmation\n• Real-time progress feedback\n\nStatus: {dependency_status}\n\nType "!test" to run dependency diagnostics.']
 
         # Show dockwidget at the bottom
         self.iface.addDockWidget(Qt.BottomDockWidgetArea, self.dlg)
