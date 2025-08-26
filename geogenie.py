@@ -42,6 +42,16 @@ try:
 except ImportError as e:
     MISSING_PACKAGES.append(f"anthropic (error: {str(e)})")
 
+try:
+    import google.generativeai
+except ImportError as e:
+    MISSING_PACKAGES.append(f"google-generativeai (error: {str(e)})")
+
+try:
+    import requests
+except ImportError as e:
+    MISSING_PACKAGES.append(f"requests (error: {str(e)})")
+
 API_EXIST = len(MISSING_PACKAGES) == 0
 
 
@@ -56,6 +66,8 @@ class GeoGenie:
         self.plugin_dir = os.path.dirname(__file__)
         self.api_key_path = os.path.join(self.plugin_dir, 'api_key.txt')
         self.claude_api_key_path = os.path.join(self.plugin_dir, 'claude_api_key.txt')
+        self.gemini_api_key_path = os.path.join(self.plugin_dir, 'gemini_api_key.txt')
+        self.ollama_url_path = os.path.join(self.plugin_dir, 'ollama_url.txt')
         
         # Initialize locale
         locale = QSettings().value('locale/userLocale')[0:2]
@@ -160,14 +172,36 @@ class GeoGenie:
         buttonY.setText(button)
         msgBox.exec_()
 
-    def is_claude_model(self, model):
-        """Check if the model is a Claude model"""
-        claude_models = [
-            'claude-3-5-sonnet-20241022', 'claude-3-5-haiku-20241022',
-            'claude-3-opus-20240229', 'claude-3-sonnet-20240229', 
-            'claude-3-haiku-20240307'
-        ]
-        return model in claude_models
+    def get_provider_models(self, provider):
+        """Get available models for a provider"""
+        models = {
+            'openai': [
+                'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4',
+                'gpt-3.5-turbo', 'gpt-3.5-turbo-16k'
+            ],
+            'anthropic': [
+                'claude-3-5-sonnet-20241022', 'claude-3-5-haiku-20241022',
+                'claude-3-opus-20240229', 'claude-3-sonnet-20240229', 
+                'claude-3-haiku-20240307'
+            ],
+            'gemini': [
+                'gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'
+            ],
+            'ollama': [
+                'llama3.1', 'llama3.1:70b', 'llama3.1:8b',
+                'codellama', 'mistral', 'qwen2.5:32b'
+            ]
+        }
+        return models.get(provider, [])
+    
+    def update_model_list(self, provider):
+        """Update model dropdown based on selected provider"""
+        if hasattr(self.dlg, 'model'):
+            self.dlg.model.clear()
+            models = self.get_provider_models(provider)
+            self.dlg.model.addItems(models)
+            if models:
+                self.dlg.model.setCurrentIndex(0)
     
     def test_dependencies(self):
         """Test and report package installation status"""
@@ -180,7 +214,7 @@ class GeoGenie:
         report.append("")
         
         # Test each package individually
-        for package_name in ['openai', 'anthropic']:
+        for package_name in ['openai', 'anthropic', 'google-generativeai', 'requests']:
             try:
                 if package_name == 'openai':
                     import openai
@@ -188,6 +222,12 @@ class GeoGenie:
                 elif package_name == 'anthropic':
                     import anthropic
                     report.append(f"✅ {package_name}: {anthropic.__version__}")
+                elif package_name == 'google-generativeai':
+                    import google.generativeai
+                    report.append(f"✅ {package_name}: Available")
+                elif package_name == 'requests':
+                    import requests
+                    report.append(f"✅ {package_name}: {requests.__version__}")
             except ImportError as e:
                 report.append(f"❌ {package_name}: {str(e)}")
                 # Try to get more info
@@ -297,51 +337,90 @@ class GeoGenie:
             self.dlg.chatgpt_ans.append(f"\n\nUser: {question}")
             self.dlg.chatgpt_ans.append("\nProcessing with GeoGenie AI...")
 
-            # Get model and API keys with safe access
-            model = getattr(self.dlg, 'model', None)
-            if model is None:
+            # Get provider, model and API keys
+            provider_widget = getattr(self.dlg, 'provider_combo', None)
+            if provider_widget is None:
+                self.dlg.chatgpt_ans.append("\n❌ Error: Provider selection widget not found")
+                self._enable_ui()
+                return
+            
+            provider_text = provider_widget.currentText()
+            provider_map = {
+                'OpenAI': 'openai',
+                'Anthropic (Claude)': 'anthropic', 
+                'Google (Gemini)': 'gemini',
+                'Ollama (Local)': 'ollama'
+            }
+            provider = provider_map.get(provider_text, 'openai')
+            
+            model_widget = getattr(self.dlg, 'model', None)
+            if model_widget is None:
                 self.dlg.chatgpt_ans.append("\n❌ Error: Model selection widget not found")
                 self._enable_ui()
                 return
             
-            model = model.currentText() if model.currentText() else "gpt-3.5-turbo"
+            model = model_widget.currentText() if model_widget.currentText() else self.get_provider_models(provider)[0]
             
             temperature_widget = getattr(self.dlg, 'temperature', None)
             temperature = temperature_widget.value() if temperature_widget else 0.1
             
-            openai_api_key = None
-            claude_api_key = None
+            # Get API keys based on provider
+            api_keys = {}
             
-            if self.is_claude_model(model):
-                # Get Claude API key
-                claude_widget = getattr(self.dlg, 'claude_apikey', None)
-                if claude_widget and claude_widget.text():
-                    claude_api_key = claude_widget.text()
-                    # Save key
-                    with open(self.claude_api_key_path, 'w') as f:
-                        f.write(claude_api_key)
-                elif os.path.exists(self.claude_api_key_path):
-                    with open(self.claude_api_key_path, 'r') as f:
-                        claude_api_key = f.read().strip()
-                else:
-                    self.showMessage("GeoGenie", "Please enter your Claude API key.", "OK", "Warning")
-                    self._enable_ui()
-                    return
-            else:
-                # Get OpenAI API key
+            if provider == 'openai':
                 openai_widget = getattr(self.dlg, 'custom_apikey', None)
                 if openai_widget and openai_widget.text():
-                    openai_api_key = openai_widget.text()
-                    # Save key
+                    api_keys['openai_api_key'] = openai_widget.text()
                     with open(self.api_key_path, 'w') as f:
-                        f.write(openai_api_key)
+                        f.write(api_keys['openai_api_key'])
                 elif os.path.exists(self.api_key_path):
                     with open(self.api_key_path, 'r') as f:
-                        openai_api_key = f.read().strip()
+                        api_keys['openai_api_key'] = f.read().strip()
                 else:
                     self.showMessage("GeoGenie", "Please enter your OpenAI API key.", "OK", "Warning")
                     self._enable_ui()
                     return
+                    
+            elif provider == 'anthropic':
+                claude_widget = getattr(self.dlg, 'claude_apikey', None)
+                if claude_widget and claude_widget.text():
+                    api_keys['anthropic_api_key'] = claude_widget.text()
+                    with open(self.claude_api_key_path, 'w') as f:
+                        f.write(api_keys['anthropic_api_key'])
+                elif os.path.exists(self.claude_api_key_path):
+                    with open(self.claude_api_key_path, 'r') as f:
+                        api_keys['anthropic_api_key'] = f.read().strip()
+                else:
+                    self.showMessage("GeoGenie", "Please enter your Claude API key.", "OK", "Warning")
+                    self._enable_ui()
+                    return
+                    
+            elif provider == 'gemini':
+                gemini_widget = getattr(self.dlg, 'gemini_apikey', None)
+                if gemini_widget and gemini_widget.text():
+                    api_keys['gemini_api_key'] = gemini_widget.text()
+                    with open(self.gemini_api_key_path, 'w') as f:
+                        f.write(api_keys['gemini_api_key'])
+                elif os.path.exists(self.gemini_api_key_path):
+                    with open(self.gemini_api_key_path, 'r') as f:
+                        api_keys['gemini_api_key'] = f.read().strip()
+                else:
+                    self.showMessage("GeoGenie", "Please enter your Gemini API key.", "OK", "Warning")
+                    self._enable_ui()
+                    return
+                    
+            elif provider == 'ollama':
+                ollama_widget = getattr(self.dlg, 'ollama_url', None)
+                if ollama_widget and ollama_widget.text():
+                    api_keys['ollama_url'] = ollama_widget.text()
+                    with open(self.ollama_url_path, 'w') as f:
+                        f.write(api_keys['ollama_url'])
+                elif os.path.exists(self.ollama_url_path):
+                    with open(self.ollama_url_path, 'r') as f:
+                        api_keys['ollama_url'] = f.read().strip()
+                else:
+                    # Default Ollama URL
+                    api_keys['ollama_url'] = 'http://localhost:11434'
 
             # Initialize coordinator if needed
             if not self.coordinator:
@@ -351,14 +430,14 @@ class GeoGenie:
                 self.coordinator.processing_completed.connect(self._on_processing_completed)
                 self.coordinator.processing_error.connect(self._on_processing_error)
 
-            # Initialize LLM client
-            self.dlg.chatgpt_ans.append(f"\n🤖 Initializing LLM client with model: {model}")
+            # Initialize LLM client with provider support
+            self.dlg.chatgpt_ans.append(f"\n🤖 Initializing {provider.title()} LLM client with model: {model}")
             if not self.coordinator.initialize_llm_client(
-                openai_api_key=openai_api_key,
-                claude_api_key=claude_api_key,
-                model=model
+                provider=provider,
+                model=model,
+                **api_keys
             ):
-                self.showMessage("GeoGenie", "Failed to initialize LLM client. Check your API key.", "OK", "Warning")
+                self.showMessage("GeoGenie", f"Failed to initialize {provider.title()} LLM client. Check your credentials.", "OK", "Warning")
                 self._enable_ui()
                 return
 
@@ -463,6 +542,28 @@ class GeoGenie:
                 claude_widget = getattr(self.dlg, 'claude_apikey', None)
                 if claude_widget:
                     claude_widget.setText(key)
+                    
+            # Read Gemini API key
+            if os.path.exists(self.gemini_api_key_path):
+                with open(self.gemini_api_key_path, 'r') as f:
+                    key = f.read().strip()
+                gemini_widget = getattr(self.dlg, 'gemini_apikey', None)
+                if gemini_widget:
+                    gemini_widget.setText(key)
+                    
+            # Read Ollama URL
+            if os.path.exists(self.ollama_url_path):
+                with open(self.ollama_url_path, 'r') as f:
+                    url = f.read().strip()
+                ollama_widget = getattr(self.dlg, 'ollama_url', None)
+                if ollama_widget:
+                    ollama_widget.setText(url)
+            else:
+                # Set default Ollama URL
+                ollama_widget = getattr(self.dlg, 'ollama_url', None)
+                if ollama_widget:
+                    ollama_widget.setText('http://localhost:11434')
+                    
         except Exception as e:
             QgsMessageLog.logMessage(f"Error reading API keys: {str(e)}", 'GeoGenie', Qgis.Warning)
 
@@ -502,6 +603,19 @@ class GeoGenie:
             self.dlg.export_ans.clicked.connect(self.export_messages)
         if hasattr(self.dlg, 'clear_ans'):
             self.dlg.clear_ans.clicked.connect(self.clear_ans_fun)
+            
+        # Connect provider selection to model update
+        if hasattr(self.dlg, 'provider_combo'):
+            self.dlg.provider_combo.currentTextChanged.connect(
+                lambda text: self.update_model_list({
+                    'OpenAI': 'openai',
+                    'Anthropic (Claude)': 'anthropic', 
+                    'Google (Gemini)': 'gemini',
+                    'Ollama (Local)': 'ollama'
+                }.get(text, 'openai'))
+            )
+            # Initialize with default provider
+            self.update_model_list('openai')
 
         # Enable history navigation
         up_arrow = QShortcut(QKeySequence.MoveToNextLine, self.dlg.question)

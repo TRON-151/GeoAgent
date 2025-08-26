@@ -311,6 +311,63 @@ p, li { white-space: pre-wrap; }
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
+           <layout class="QHBoxLayout" name="provider_layout">
+            <item>
+             <widget class="QLabel" name="provider_label">
+              <property name="toolTip">
+               <string>Select the AI provider for language model processing.</string>
+              </property>
+              <property name="text">
+               <string>AI Provider:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="provider_combo">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string>OpenAI</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Anthropic (Claude)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Google (Gemini)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Ollama (Local)</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <spacer name="provider_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
              <widget class="QLabel" name="label_7">
@@ -318,10 +375,7 @@ p, li { white-space: pre-wrap; }
                <string>The model which will generate the completion.</string>
               </property>
               <property name="text">
-               <string>&lt;a href=&quot;https://platform.openai.com/docs/models/overview&quot;&gt;Models &lt;/a&gt;:   </string>
-              </property>
-              <property name="openExternalLinks">
-               <bool>true</bool>
+               <string>Model:</string>
               </property>
              </widget>
             </item>
@@ -355,76 +409,6 @@ p, li { white-space: pre-wrap; }
               <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
               </property>
-              <item>
-               <property name="text">
-                <string>text-davinci-003</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>gpt-4</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>gpt-3.5-turbo</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>gpt-3.5-turbo-0301</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>text-curie-001</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>text-babbage-001</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>text-ada-001</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>code-davinci-002</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>code-cushman-001</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>claude-3-5-sonnet-20241022</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>claude-3-5-haiku-20241022</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>claude-3-opus-20240229</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>claude-3-sonnet-20240229</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>claude-3-haiku-20240307</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item>
@@ -581,6 +565,85 @@ p, li { white-space: pre-wrap; }
             </item>
             <item>
              <spacer name="claude_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="gemini_api_layout">
+            <item>
+             <widget class="QLabel" name="gemini_label">
+              <property name="toolTip">
+               <string>Google Gemini API key for Google models</string>
+              </property>
+              <property name="text">
+               <string>&lt;a href=&quot;https://makersuite.google.com/app/apikey&quot;&gt;Gemini API key&lt;/a&gt; </string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsPasswordLineEdit" name="gemini_apikey"/>
+            </item>
+            <item>
+             <spacer name="gemini_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="ollama_api_layout">
+            <item>
+             <widget class="QLabel" name="ollama_label">
+              <property name="toolTip">
+               <string>Ollama server URL for local model inference</string>
+              </property>
+              <property name="text">
+               <string>&lt;a href=&quot;https://ollama.ai/&quot;&gt;Ollama URL&lt;/a&gt; </string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="ollama_url">
+              <property name="text">
+               <string>http://localhost:11434</string>
+              </property>
+              <property name="placeholderText">
+               <string>http://localhost:11434</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="ollama_spacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>

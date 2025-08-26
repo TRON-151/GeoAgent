@@ -63,16 +63,15 @@ class GeoGenieCoordinator(QObject):
         
         QgsMessageLog.logMessage("GeoGenie Coordinator initialized", 'GeoGenie', Qgis.Info)
     
-    def initialize_llm_client(self, openai_api_key: str = None, claude_api_key: str = None, 
-                            model: str = "gpt-3.5-turbo"):
-        """Initialize LLM client with API keys"""
+    def initialize_llm_client(self, provider: str = "openai", model: str = None, **api_keys):
+        """Initialize LLM client with provider and API keys"""
         try:
             self.llm_client = LLMClient(
-                openai_api_key=openai_api_key,
-                claude_api_key=claude_api_key,
-                model=model
+                provider=provider,
+                model=model,
+                **api_keys
             )
-            QgsMessageLog.logMessage(f"LLM client initialized with model: {model}", 'GeoGenie', Qgis.Info)
+            QgsMessageLog.logMessage(f"LLM client initialized with {provider} provider and model: {model}", 'GeoGenie', Qgis.Info)
             return True
         except Exception as e:
             QgsMessageLog.logMessage(f"Error initializing LLM client: {str(e)}", 'GeoGenie', Qgis.Critical)

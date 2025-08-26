@@ -29,43 +29,61 @@ except ImportError:
     ANTHROPIC_AVAILABLE = False
 
 try:
+    import google.generativeai as genai
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+
+try:
+    import requests
+    REQUESTS_AVAILABLE = True
+except ImportError:
+    REQUESTS_AVAILABLE = False
+
+try:
     import tiktoken
     TIKTOKEN_AVAILABLE = True
 except ImportError:
     TIKTOKEN_AVAILABLE = False
 
 
+class LLMProvider:
+    """Provider constants"""
+    OPENAI = "openai"
+    ANTHROPIC = "anthropic" 
+    GEMINI = "gemini"
+    OLLAMA = "ollama"
+
+
 class LLMClient:
     """
-    Unified LLM client for OpenAI and Anthropic models
+    Unified LLM client for multiple providers: OpenAI, Anthropic, Gemini, Ollama
     
     Handles function calling for QGIS processing algorithm extraction
-    from natural language prompts.
+    from natural language prompts across different AI providers.
     """
     
-    def __init__(self, openai_api_key: str = None, claude_api_key: str = None, 
-                 model: str = "gpt-3.5-turbo"):
+    def __init__(self, provider: str = LLMProvider.OPENAI, model: str = None, **api_keys):
         """
-        Initialize LLM client
+        Initialize LLM client with provider support
         
         Args:
-            openai_api_key: OpenAI API key
-            claude_api_key: Anthropic Claude API key  
-            model: Model name to use
+            provider: AI provider (openai, anthropic, gemini, ollama)
+            model: Model name to use  
+            **api_keys: API keys and configuration
         """
-        self.openai_api_key = openai_api_key
-        self.claude_api_key = claude_api_key
+        self.provider = provider.lower()
         self.model = model
+        self.api_keys = api_keys
         
-        # Initialize clients
+        # Provider clients
         self.openai_client = None
         self.claude_client = None
+        self.gemini_client = None
+        self.ollama_url = api_keys.get('ollama_url', 'http://localhost:11434')
         
-        if openai_api_key and OPENAI_AVAILABLE:
-            self.openai_client = openai.OpenAI(api_key=openai_api_key)
-        
-        if claude_api_key and ANTHROPIC_AVAILABLE:
-            self.claude_client = anthropic.Anthropic(api_key=claude_api_key)
+        # Initialize the selected provider
+        self._initialize_provider()
         
         # Token counter
         self.token_counter = None
@@ -76,6 +94,82 @@ class LLMClient:
                 )
             except:
                 self.token_counter = tiktoken.get_encoding("cl100k_base")
+    
+    def _initialize_provider(self):
+        """Initialize the selected provider client"""
+        try:
+            if self.provider == LLMProvider.OPENAI:
+                self._init_openai()
+            elif self.provider == LLMProvider.ANTHROPIC:
+                self._init_anthropic()
+            elif self.provider == LLMProvider.GEMINI:
+                self._init_gemini()
+            elif self.provider == LLMProvider.OLLAMA:
+                self._init_ollama()
+            else:
+                raise ValueError(f"Unsupported provider: {self.provider}")
+                
+        except Exception as e:
+            QgsMessageLog.logMessage(f"Failed to initialize {self.provider} provider: {str(e)}", 'GeoGenie', Qgis.Critical)
+            raise
+    
+    def _init_openai(self):
+        """Initialize OpenAI client"""
+        if not OPENAI_AVAILABLE:
+            raise ImportError("OpenAI package not available. Install with: pip install openai>=1.0.0")
+        
+        api_key = self.api_keys.get('openai_api_key')
+        if not api_key:
+            raise ValueError("OpenAI API key required")
+        
+        self.openai_client = openai.OpenAI(api_key=api_key)
+        if not self.model:
+            self.model = "gpt-3.5-turbo"
+        QgsMessageLog.logMessage(f"OpenAI client initialized with model: {self.model}", 'GeoGenie', Qgis.Info)
+    
+    def _init_anthropic(self):
+        """Initialize Anthropic client"""
+        if not ANTHROPIC_AVAILABLE:
+            raise ImportError("Anthropic package not available. Install with: pip install anthropic>=0.18.0")
+        
+        api_key = self.api_keys.get('anthropic_api_key') or self.api_keys.get('claude_api_key')
+        if not api_key:
+            raise ValueError("Anthropic/Claude API key required")
+        
+        self.claude_client = anthropic.Anthropic(api_key=api_key)
+        if not self.model:
+            self.model = "claude-3-5-sonnet-20241022"
+        QgsMessageLog.logMessage(f"Anthropic client initialized with model: {self.model}", 'GeoGenie', Qgis.Info)
+    
+    def _init_gemini(self):
+        """Initialize Gemini client"""
+        if not GEMINI_AVAILABLE:
+            raise ImportError("Google GenerativeAI package not available. Install with: pip install google-generativeai")
+        
+        api_key = self.api_keys.get('gemini_api_key')
+        if not api_key:
+            raise ValueError("Gemini API key required")
+        
+        genai.configure(api_key=api_key)
+        if not self.model:
+            self.model = "gemini-pro"
+        QgsMessageLog.logMessage(f"Gemini client initialized with model: {self.model}", 'GeoGenie', Qgis.Info)
+    
+    def _init_ollama(self):
+        """Initialize Ollama client"""
+        if not REQUESTS_AVAILABLE:
+            raise ImportError("Requests package not available. Install with: pip install requests")
+        
+        # Test Ollama connection
+        try:
+            response = requests.get(f"{self.ollama_url}/api/tags", timeout=5)
+            response.raise_for_status()
+        except Exception as e:
+            raise ConnectionError(f"Cannot connect to Ollama server at {self.ollama_url}: {str(e)}")
+        
+        if not self.model:
+            self.model = "llama2"
+        QgsMessageLog.logMessage(f"Ollama client initialized with URL: {self.ollama_url}, model: {self.model}", 'GeoGenie', Qgis.Info)
     
     def is_openai_model(self, model: str) -> bool:
         """Check if model is an OpenAI model"""
@@ -135,6 +229,8 @@ class LLMClient:
                 return self._call_claude_function(full_prompt, functions)
             elif self.is_openai_model(self.model) and self.openai_client:
                 return self._call_openai_function(full_prompt, functions)
+            elif self.provider == LLMProvider.GEMINI:
+                return self._call_gemini_function(full_prompt, functions)
             else:
                 raise Exception(f"Model {self.model} not supported or API key not provided")
                 
@@ -377,6 +473,108 @@ If no suitable algorithm is available, respond with:
             
         except Exception as e:
             raise Exception(f"Claude API error: {str(e)}")
+    
+    def _call_gemini_function(self, prompt: str, functions: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Call Gemini API with function calling"""
+        try:
+            if not GEMINI_AVAILABLE:
+                raise ImportError("Google GenerativeAI not available")
+            
+            # Create Gemini model
+            model = genai.GenerativeModel(self.model)
+            
+            # Convert functions to Gemini format (use registry keys, not execute_ names)
+            function_descriptions = []
+            for func in functions:
+                # Extract the actual algorithm name by removing 'execute_' prefix
+                func_name = func['name']
+                if func_name.startswith('execute_'):
+                    func_name = func_name[8:]  # Remove 'execute_' prefix
+                
+                desc = f"Function: {func_name} - {func.get('description', '')}\n"
+                desc += f"Parameters: {func.get('parameters', {}).get('properties', {}).keys()}"
+                function_descriptions.append(desc)
+            
+            gemini_prompt = f"""
+{prompt}
+
+Available QGIS functions:
+{chr(10).join(function_descriptions)}
+
+Please respond with a JSON object containing:
+- algorithm: the function name to use
+- parameters: dictionary with parameter values
+- confidence: float 0-1 indicating confidence
+- reasoning: explanation of your choice
+
+Example response:
+{{
+    "algorithm": "buffer",
+    "parameters": {{"INPUT": "layer_name", "DISTANCE": 100}},
+    "confidence": 0.9,
+    "reasoning": "User wants to create a 100m buffer around a layer"
+}}
+"""
+            
+            # Generate response
+            response = model.generate_content(gemini_prompt)
+            response_text = response.text.strip()
+            
+            QgsMessageLog.logMessage(f"Gemini response: {response_text}", 'GeoGenie', Qgis.Info)
+            
+            # Parse JSON response
+            try:
+                import json
+                result = json.loads(response_text)
+                
+                # Map parameters if needed
+                if result.get('algorithm') and result.get('parameters'):
+                    result['parameters'] = self._map_parameter_names(
+                        result['algorithm'], result['parameters']
+                    )
+                
+                return {
+                    'success': True,
+                    'algorithm': result.get('algorithm'),
+                    'parameters': result.get('parameters', {}),
+                    'confidence': result.get('confidence', 0.8),
+                    'reasoning': result.get('reasoning', 'Processed with Gemini')
+                }
+                
+            except json.JSONDecodeError:
+                # Try to extract JSON from text
+                import re
+                json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+                if json_match:
+                    try:
+                        result = json.loads(json_match.group())
+                        if result.get('algorithm') and result.get('parameters'):
+                            result['parameters'] = self._map_parameter_names(
+                                result['algorithm'], result['parameters']
+                            )
+                        
+                        return {
+                            'success': True,
+                            'algorithm': result.get('algorithm'),
+                            'parameters': result.get('parameters', {}),
+                            'confidence': result.get('confidence', 0.7),
+                            'reasoning': result.get('reasoning', response_text)
+                        }
+                    except json.JSONDecodeError:
+                        pass
+            
+            # Fallback if JSON parsing fails
+            return {
+                'success': False,
+                'error': "Could not parse algorithm request from Gemini",
+                'algorithm': None,
+                'parameters': {},
+                'confidence': 0.0,
+                'reasoning': response_text
+            }
+            
+        except Exception as e:
+            raise Exception(f"Gemini API error: {str(e)}")
     
     def _map_parameter_names(self, algorithm_name: str, raw_params: Dict[str, Any]) -> Dict[str, Any]:
         """Map parameter names from natural language to QGIS expected format"""
