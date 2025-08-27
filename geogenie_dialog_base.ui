@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1259</width>
-    <height>375</height>
+    <width>1042</width>
+    <height>342</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,23 +30,6 @@
           <item>
            <layout class="QHBoxLayout" name="layout_custom">
             <item>
-             <widget class="QTextEdit" name="chatgpt_edit">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="html">
-               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-             </widget>
-            </item>
-            <item>
              <widget class="QTextBrowser" name="chatgpt_ans">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -54,178 +37,17 @@ p, li { white-space: pre-wrap; }
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QLabel" name="label">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>CHAT:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="general">
-              <property name="text">
-               <string>General</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="qgisui">
-              <property name="text">
-               <string>QGIS</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="qgiscode">
-              <property name="text">
-               <string>QCode</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="Line" name="line">
-              <property name="maximumSize">
-               <size>
-                <width>3</width>
-                <height>31</height>
-               </size>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="chatgpt_edit_btn">
-              <property name="text">
-               <string>Modify AI</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="addonmap">
-              <property name="toolTip">
-               <string>e.g. Give me a geojson format for Cyprus cities</string>
-              </property>
-              <property name="text">
-               <string>Add/Execute</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="save_last_ans">
-              <property name="focusPolicy">
-               <enum>Qt::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string>Save</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="Line" name="line_2">
-              <property name="maximumSize">
-               <size>
-                <width>3</width>
-                <height>31</height>
-               </size>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="chatgpt_python_console">
-              <property name="text">
-               <string>Console</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="Line" name="line_3">
-              <property name="maximumSize">
-               <size>
-                <width>3</width>
-                <height>31</height>
-               </size>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="Line" name="line_7">
-              <property name="maximumSize">
-               <size>
-                <width>3</width>
-                <height>31</height>
-               </size>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="export_ans">
-              <property name="focusPolicy">
-               <enum>Qt::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string>Export Chat</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="clear_ans">
-              <property name="focusPolicy">
-               <enum>Qt::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string>Clear Chat</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="Line" name="line_4">
-              <property name="maximumSize">
-               <size>
-                <width>3</width>
-                <height>31</height>
-               </size>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
+              <property name="styleSheet">
+               <string notr="true">QTextBrowser {
+    background-color: #adb8b4;
+    border: 1px solid #39394a;
+    border-radius: 12px;
+    /*color: #d9dce0; */
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 14px;
+    selection-background-color: #4a77b6;
+    selection-color: white;
+}</string>
               </property>
              </widget>
             </item>
@@ -234,7 +56,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <property name="spacing">
-             <number>3</number>
+             <number>2</number>
             </property>
             <item>
              <widget class="QLineEdit" name="question">
@@ -244,8 +66,33 @@ p, li { white-space: pre-wrap; }
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit{
+	border-radius: 5px;
+	border: 1px solid #39394a;
+}</string>
+              </property>
               <property name="text">
                <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Line" name="line_6">
+              <property name="maximumSize">
+               <size>
+                <width>3</width>
+                <height>31</height>
+               </size>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
               </property>
              </widget>
             </item>
@@ -257,6 +104,12 @@ p, li { white-space: pre-wrap; }
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="minimumSize">
+               <size>
+                <width>74</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
@@ -266,6 +119,16 @@ p, li { white-space: pre-wrap; }
               <property name="focusPolicy">
                <enum>Qt::StrongFocus</enum>
               </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton{
+	border-radius: 5px;
+	background-color: #4a4f4d;
+	padding: 6px;
+ 	color: white;
+}
+
+</string>
+              </property>
               <property name="text">
                <string>Send</string>
               </property>
@@ -273,19 +136,6 @@ p, li { white-space: pre-wrap; }
             </item>
             <item>
              <widget class="Line" name="line_5">
-              <property name="maximumSize">
-               <size>
-                <width>3</width>
-                <height>31</height>
-               </size>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="Line" name="line_6">
               <property name="maximumSize">
                <size>
                 <width>3</width>
@@ -317,6 +167,9 @@ p, li { white-space: pre-wrap; }
               <property name="toolTip">
                <string>Select the AI provider for language model processing.</string>
               </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
               <property name="text">
                <string>AI Provider:</string>
               </property>
@@ -329,6 +182,16 @@ p, li { white-space: pre-wrap; }
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QComboBox{
+	background-color:#adb8b4;
+	border-radius: 5px;
+	padding: 6px;
+ 	/*color: white; */
+}
+
+</string>
               </property>
               <item>
                <property name="text">
@@ -380,22 +243,6 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <spacer name="horizontalSpacer_6">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>46</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
              <widget class="QComboBox" name="model">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -403,8 +250,24 @@ p, li { white-space: pre-wrap; }
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="minimumSize">
+               <size>
+                <width>203</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="focusPolicy">
                <enum>Qt::WheelFocus</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QComboBox{
+	border-radius: 5px;
+	padding: 6px;
+	background-color: #adb8b4; 
+ 	/*color: white;*/
+}
+
+</string>
               </property>
               <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
@@ -418,87 +281,7 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QLabel" name="label_5">
-              <property name="toolTip">
-               <string>Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.</string>
-              </property>
-              <property name="text">
-               <string>Temperature:     </string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="temperature">
-              <property name="decimals">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.100000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_4">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QLabel" name="label_6">
-              <property name="toolTip">
-               <string>One token is roughly 4 characters for normal English text</string>
-              </property>
-              <property name="text">
-               <string>Maximum length:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="max_tokens">
-              <property name="focusPolicy">
-               <enum>Qt::WheelFocus</enum>
-              </property>
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>4000</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_5">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
+                <width>30</width>
                 <height>20</height>
                </size>
               </property>
@@ -525,7 +308,20 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QgsPasswordLineEdit" name="custom_apikey"/>
+             <widget class="QgsPasswordLineEdit" name="custom_apikey">
+              <property name="minimumSize">
+               <size>
+                <width>95</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit{
+	border-radius: 5px;
+	border: 1px solid #39394a;
+}</string>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer name="horizontalSpacer_2">
@@ -561,7 +357,20 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QgsPasswordLineEdit" name="claude_apikey"/>
+             <widget class="QgsPasswordLineEdit" name="claude_apikey">
+              <property name="minimumSize">
+               <size>
+                <width>175</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit{
+	border-radius: 5px;
+	border: 1px solid #39394a;
+}</string>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer name="claude_spacer">
@@ -597,7 +406,20 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QgsPasswordLineEdit" name="gemini_apikey"/>
+             <widget class="QgsPasswordLineEdit" name="gemini_apikey">
+              <property name="minimumSize">
+               <size>
+                <width>174</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit{
+	border-radius: 5px;
+	border: 1px solid #39394a;
+}</string>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer name="gemini_spacer">
@@ -634,6 +456,18 @@ p, li { white-space: pre-wrap; }
             </item>
             <item>
              <widget class="QLineEdit" name="ollama_url">
+              <property name="minimumSize">
+               <size>
+                <width>202</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit{
+	border-radius: 5px;
+	border: 1px solid #39394a;
+}</string>
+              </property>
               <property name="text">
                <string>http://localhost:11434</string>
               </property>
