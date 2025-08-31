@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 """
-GeoGenie Dependencies Installer
-===============================
+install_dependencies.py
 
-This script installs all required dependencies for GeoGenie plugin.
-Run this script in the QGIS Python Console for automatic installation.
+Automatic dependency installer for GeoGenie plugin.
 
-Usage:
-1. Open QGIS Python Console (Plugins > Python Console)
-2. Copy and paste this entire script
-3. Press Enter to execute
+This script installs all required Python packages that GeoGenie needs to work.
+It handles the installation process and provides clear feedback to users.
 
-Dependencies to install:
+How to use:
+1. Open QGIS Python Console
+2. Copy and paste this entire script  
+3. Press Enter to install all dependencies
+
+Required packages:
 - openai>=1.0.0
 - anthropic>=0.18.0
 - google-generativeai

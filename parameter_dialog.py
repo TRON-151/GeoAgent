@@ -1,14 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-/***************************************************************************
- Parameter Dialog
-                                 A QGIS plugin
- Parameter confirmation dialog for GeoGenie
-                             -------------------
-        begin                : 2025-01-18
-        copyright            : (C) 2025 by Ahmad Abubakar Ahmad
-        email                : ahmad.abubakar@uni-muenster.de
- ***************************************************************************/
+parameter_dialog.py
+
+Parameter confirmation dialog for GeoGenie operations.
+
+This file creates a dialog box that shows users what the AI wants to do before
+actually running any QGIS operations. Users can review and modify parameters
+before confirming the execution.
+
+What this dialog shows:
+- The operation the AI wants to perform
+- Input layers and parameters the AI selected
+- Editable fields for users to modify parameters
+- Confirm or cancel buttons for user control
+- Clear explanation of what will happen
+
+Author: Ahmad Abubakar Ahmad
+Email: aabubaka@uni-muenster.de
+Date: 2025-08-31
 """
 
 from typing import Dict, Any, Optional

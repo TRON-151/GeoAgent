@@ -1,14 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-/***************************************************************************
- Context Manager
-                                 A QGIS plugin
- Context injection system for GeoGenie
-                             -------------------
-        begin                : 2025-01-18
-        copyright            : (C) 2025 by Ahmad Abubakar Ahmad
-        email                : ahmad.abubakar@uni-muenster.de
- ***************************************************************************/
+context_manager.py
+
+Context information provider for GeoGenie AI processing.
+
+This file gathers information about the current QGIS project and makes it available
+to the AI models. It helps the AI understand what data is available and what
+operations are possible.
+
+What this manager provides:
+- List of available layers in the project
+- Information about layer types and properties  
+- Available processing algorithms
+- Current map extent and coordinate system
+- Context for AI to make informed decisions
+
+Author: Ahmad Abubakar Ahmad
+Email: aabubaka@uni-muenster.de
+Date: 2025-08-31
 """
 
 from typing import Dict, Any, List, Optional

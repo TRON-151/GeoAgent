@@ -1,14 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-/***************************************************************************
- Processing Executor
-                                 A QGIS plugin
- Algorithm execution engine for GeoGenie
-                             -------------------
-        begin                : 2025-01-18
-        copyright            : (C) 2025 by Ahmad Abubakar Ahmad
-        email                : ahmad.abubakar@uni-muenster.de
- ***************************************************************************/
+processing_executor.py
+
+QGIS processing algorithm executor for GeoGenie.
+
+This file handles the execution of QGIS processing algorithms and AI segmentation
+tasks. It receives algorithm names and parameters from the coordinator and runs
+the appropriate QGIS operations.
+
+What this executor does:
+- Maintains a registry of safe QGIS algorithms  
+- Executes processing algorithms with proper error handling
+- Handles AI segmentation operations
+- Manages layer creation and result reporting
+- Provides progress feedback during execution
+
+Author: Ahmad Abubakar Ahmad
+Email: aabubaka@uni-muenster.de
+Date: 2025-08-31
 """
 
 from qgis.PyQt.QtCore import QObject, pyqtSignal
@@ -465,6 +474,40 @@ class AlgorithmRegistry:
             },
             "param_defaults": {
                 "OUTPUT": "memory:temp_output"
+            }
+        },
+        
+        "segment_buildings": {
+            "algorithm_id": "ai:segment_buildings",
+            "name": "AI Building Segmentation",
+            "description": "Extract building footprints from aerial/satellite imagery using AI",
+            "required_params": ["INPUT"],
+            "optional_params": ["CONFIDENCE", "EXTENT"],
+            "param_types": {
+                "INPUT": "raster",
+                "CONFIDENCE": "number",
+                "EXTENT": "extent"
+            },
+            "param_defaults": {
+                "CONFIDENCE": 0.5,
+                "EXTENT": None
+            }
+        },
+        
+        "segment_roads": {
+            "algorithm_id": "ai:segment_roads", 
+            "name": "AI Road Segmentation",
+            "description": "Extract road networks from aerial/satellite imagery using AI",
+            "required_params": ["INPUT"],
+            "optional_params": ["CONFIDENCE", "EXTENT"],
+            "param_types": {
+                "INPUT": "raster",
+                "CONFIDENCE": "number", 
+                "EXTENT": "extent"
+            },
+            "param_defaults": {
+                "CONFIDENCE": 0.4,
+                "EXTENT": None
             }
         }
     }

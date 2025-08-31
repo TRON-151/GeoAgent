@@ -1,14 +1,21 @@
 # -*- coding: utf-8 -*-
 """
-/***************************************************************************
- GeoGenie
-                                 A QGIS plugin
- Prompt-Driven GeoAgent for QGIS - Natural language geospatial analysis
-                              -------------------
-        begin                : 2025-01-18
-        copyright            : (C) 2025 by Ahmad Abubakar Ahmad
-        email                : ahmad.abubakar@uni-muenster.de
- ***************************************************************************/
+geogenie.py
+
+Main GeoGenie plugin file for QGIS.
+
+This is the core plugin file that handles plugin startup, UI creation, and cleanup.
+It creates the main interface and connects all the different parts of GeoGenie together.
+
+What this file does:
+- Sets up the GeoGenie dock widget in QGIS
+- Creates menu items and toolbar buttons  
+- Handles plugin startup and shutdown
+- Manages the main coordinator that processes user requests
+
+Author: Ahmad Abubakar Ahmad
+Email: aabubaka@uni-muenster.de
+Date: 2025-08-31
 """
 
 import os
@@ -20,15 +27,13 @@ from qgis.PyQt.QtWidgets import QAction, QMessageBox, QShortcut
 from qgis.core import QgsMessageLog
 from qgis.utils import Qgis
 
-# Initialize Qt resources from file resources.py
-from .resources import *
-# Import the code for the dialog
-from .geogenie_dialog import GeoGenieDockWidget
-# Import Phase 1 components
-from .geogenie_coordinator import GeoGenieCoordinator
-from .install_packages.check_dependencies import check
+# Import required components
+from .resources import *                                 # UI resources (icons, etc.)
+from .geogenie_dialog import GeoGenieDockWidget         # Main user interface
+from .geogenie_coordinator import GeoGenieCoordinator   # Core processing logic
+from .install_packages.check_dependencies import check  # Dependency checker
 
-# Check API dependencies with detailed error reporting
+# Check if AI API libraries are available
 API_EXIST = False
 MISSING_PACKAGES = []
 
@@ -56,10 +61,23 @@ API_EXIST = len(MISSING_PACKAGES) == 0
 
 
 class GeoGenie:
-    """QGIS Plugin Implementation for GeoGenie Phase 1"""
+    """
+    Main GeoGenie plugin class for QGIS.
+    
+    This class handles the complete lifecycle of the GeoGenie plugin. It sets up
+    the user interface, manages AI API connections, and coordinates all plugin functionality.
+    """
 
     def __init__(self, iface):
-        """Constructor"""
+        """
+        Set up the GeoGenie plugin.
+        
+        This initializes the plugin by setting up file paths, language support,
+        and preparing the connection to QGIS.
+        
+        Args:
+            iface: QGIS interface object that provides access to QGIS functions
+        """
         self.iface = iface
         
         # Initialize plugin directory

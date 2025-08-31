@@ -1,14 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-/***************************************************************************
- Parameter Validator
-                                 A QGIS plugin
- Parameter validation system for GeoGenie
-                             -------------------
-        begin                : 2025-01-18
-        copyright            : (C) 2025 by Ahmad Abubakar Ahmad
-        email                : ahmad.abubakar@uni-muenster.de
- ***************************************************************************/
+parameter_validator.py
+
+Parameter validation system for GeoGenie AI requests.
+
+This file checks and validates parameters that the AI suggests for QGIS operations.
+It ensures that layer names exist, coordinate systems are valid, and parameter
+values are within acceptable ranges.
+
+What this validator does:
+- Checks if suggested layers exist in the project
+- Validates coordinate reference systems
+- Ensures numeric parameters are within valid ranges  
+- Confirms file paths and output locations
+- Prevents errors before running QGIS operations
+
+Author: Ahmad Abubakar Ahmad
+Email: aabubaka@uni-muenster.de
+Date: 2025-08-31
 """
 
 import re

@@ -1,14 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-/***************************************************************************
- LLM Client
-                                 A QGIS plugin
- LLM integration layer for GeoGenie
-                             -------------------
-        begin                : 2025-01-18
-        copyright            : (C) 2025 by Ahmad Abubakar Ahmad
-        email                : ahmad.abubakar@uni-muenster.de
- ***************************************************************************/
+llm_client.py
+
+AI language model client for GeoGenie plugin.
+
+This file handles communication with different AI services like OpenAI GPT, 
+Claude, and Google Gemini. It converts user questions into structured requests
+that QGIS can understand and execute.
+
+What this client does:
+- Connects to multiple AI services (OpenAI, Claude, Gemini, Ollama)
+- Sends natural language questions with QGIS context
+- Receives structured responses with processing algorithms
+- Handles function calling for algorithm parameter extraction
+- Manages API keys and error handling
+
+Author: Ahmad Abubakar Ahmad
+Email: aabubaka@uni-muenster.de  
+Date: 2025-08-31
 """
 
 import json
@@ -57,10 +66,16 @@ class LLMProvider:
 
 class LLMClient:
     """
-    Unified LLM client for multiple providers: OpenAI, Anthropic, Gemini, Ollama
+    AI language model client that works with multiple AI services.
     
-    Handles function calling for QGIS processing algorithm extraction
-    from natural language prompts across different AI providers.
+    This class can connect to different AI providers and send natural language
+    questions to get structured responses for QGIS operations.
+    
+    Supported AI services:
+    - OpenAI GPT models
+    - Anthropic Claude
+    - Google Gemini  
+    - Local Ollama models
     """
     
     def __init__(self, provider: str = LLMProvider.OPENAI, model: str = None, **api_keys):
@@ -285,7 +300,19 @@ Remember: Only use algorithms from the available list. If the request cannot be 
     def _build_algorithm_functions(self) -> List[Dict[str, Any]]:
         """Build function calling schema for QGIS algorithms"""
         
-        from .processing_executor import AlgorithmRegistry
+        # Use absolute import to avoid module context issues
+        try:
+            # Try relative import first (when properly loaded as package)
+            from .processing_executor import AlgorithmRegistry
+        except (ImportError, ValueError):
+            # Fallback: direct module import
+            import sys
+            import os
+            plugin_dir = os.path.dirname(__file__)
+            if plugin_dir not in sys.path:
+                sys.path.insert(0, plugin_dir)
+            import processing_executor
+            AlgorithmRegistry = processing_executor.AlgorithmRegistry
         
         functions = []
         
@@ -636,7 +663,17 @@ Example response:
                            result: Dict[str, Any]) -> str:
         """Generate human-readable explanation of the algorithm execution"""
         
-        from .processing_executor import AlgorithmRegistry
+        # Use absolute import to avoid module context issues  
+        try:
+            from .processing_executor import AlgorithmRegistry
+        except (ImportError, ValueError):
+            import sys
+            import os
+            plugin_dir = os.path.dirname(__file__)
+            if plugin_dir not in sys.path:
+                sys.path.insert(0, plugin_dir)
+            import processing_executor
+            AlgorithmRegistry = processing_executor.AlgorithmRegistry
         
         alg_info = AlgorithmRegistry.get_algorithm_info(algorithm_name)
         if not alg_info:

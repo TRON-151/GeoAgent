@@ -1,0 +1,1 @@
+pip3 install openai>=1.0.0 anthropic>=0.18.0 google-generativeai requests
