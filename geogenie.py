@@ -334,7 +334,11 @@ class GeoGenie:
             self.questions_index = len(self.questions)
 
             # Update chat display
-            self.dlg.chatgpt_ans.append(f"\n\nUser: {question}")
+            self.dlg.chatgpt_ans.append("-" * 130)
+            self.dlg.chatgpt_ans.append( 
+                f'<div style="text-align: right; margin: 10px; padding: 10px; '
+                f'background-color: #adb8b4;">'
+                f'<b>You:</b><br>{question}</div>')
             #self.dlg.chatgpt_ans.append("\nProcessing with GeoGenie AI...")
 
             # Get provider, model and API keys
@@ -449,6 +453,7 @@ class GeoGenie:
             )
 
             if not success:
+                self.dlg.chatgpt_ans.append("-" * 130)
                 self.dlg.chatgpt_ans.append("\n❌ Failed to process request. Check QGIS message log for details.")
                 self._enable_ui()
 
@@ -462,7 +467,11 @@ class GeoGenie:
         """Handle successful processing completion"""
         try:
             explanation = result.get('explanation', 'Processing completed successfully.')
-            self.dlg.chatgpt_ans.append(f"\n✅ GeoGenie: {explanation}")
+            self.dlg.chatgpt_ans.append("-" * 130)
+            self.dlg.chatgpt_ans.append( 
+                f'<div style="text-align: left; margin: 10px; padding: 10px; '
+                f'background-color: #adb8b4; margin-right: 5px;">'
+                f'<b>GeoGenie:</b><br>{explanation}</div>')
             
             # Add to history
             conversation_pair = f"{self.questions[-1]} {explanation}"
@@ -629,9 +638,13 @@ class GeoGenie:
         if hasattr(self.dlg, 'max_tokens'):
             self.dlg.max_tokens.setValue(2000)
 
-        # Initialize chat area
+        # Initialize chat area with HTML 
         self.dlg.chatgpt_ans.clear()
         self.dlg.chatgpt_ans.setAcceptRichText(True)
-        #self.dlg.chatgpt_ans.append(self.answers[0])
+        msg = ("Hi! I'm GeoGenie, How can I help you today?")
+        self.dlg.chatgpt_ans.append(
+            f'<div style="text-align: left; margin: 10px; padding: 10px; '
+            f'background-color: #adb8b4; margin-right: 5px;">'
+            f'<b>GeoGenie:</b><br>{msg}</div>')
         
         QgsMessageLog.logMessage("GeoGenie plugin started", 'GeoGenie', Qgis.Info)
