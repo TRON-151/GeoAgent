@@ -335,7 +335,7 @@ class GeoGenie:
 
             # Update chat display
             self.dlg.chatgpt_ans.append(f"\n\nUser: {question}")
-            self.dlg.chatgpt_ans.append("\nProcessing with GeoGenie AI...")
+            #self.dlg.chatgpt_ans.append("\nProcessing with GeoGenie AI...")
 
             # Get provider, model and API keys
             provider_widget = getattr(self.dlg, 'provider_combo', None)
@@ -424,14 +424,14 @@ class GeoGenie:
 
             # Initialize coordinator if needed
             if not self.coordinator:
-                self.dlg.chatgpt_ans.append("\n🔧 Initializing GeoGenie coordinator...")
+                #self.dlg.chatgpt_ans.append("\n🔧 Initializing GeoGenie coordinator...")
                 self.coordinator = GeoGenieCoordinator()
                 # Connect signals
                 self.coordinator.processing_completed.connect(self._on_processing_completed)
                 self.coordinator.processing_error.connect(self._on_processing_error)
 
             # Initialize LLM client with provider support
-            self.dlg.chatgpt_ans.append(f"\n🤖 Initializing {provider.title()} LLM client with model: {model}")
+            #self.dlg.chatgpt_ans.append(f"\n🤖 Initializing {provider.title()} LLM client with model: {model}")
             if not self.coordinator.initialize_llm_client(
                 provider=provider,
                 model=model,
@@ -442,7 +442,7 @@ class GeoGenie:
                 return
 
             # Process the request
-            self.dlg.chatgpt_ans.append(f"\n🔍 Processing request: '{question}'")
+            #self.dlg.chatgpt_ans.append(f"\n🔍 Processing request: '{question}'")
             success = self.coordinator.process_natural_language_request(
                 prompt=question,
                 parent_widget=self.dlg
@@ -502,7 +502,7 @@ class GeoGenie:
     def clear_ans_fun(self):
         """Clear chat history"""
         self.history = deque(maxlen=6)
-        self.answers = ['Welcome to GeoGenie - Your AI-Powered Geospatial Assistant.\n\nPhase 1 Features:\n• Natural language QGIS processing\n• Buffer, clip, reproject, dissolve, intersection\n• Parameter validation and confirmation\n• Real-time progress feedback']
+        #self.answers = ['']
         self.dlg.chatgpt_ans.clear()
         self.dlg.chatgpt_ans.append(self.answers[0])
 
@@ -588,8 +588,8 @@ class GeoGenie:
 
         # Initialize answers
         self.questions = []
-        dependency_status = "✅ Dependencies OK" if API_EXIST else f"❌ Missing: {', '.join(MISSING_PACKAGES[:2])}"
-        self.answers = [f'Welcome to GeoGenie - Your AI-Powered Geospatial Assistant.\n\nPhase 1 Features:\n• Natural language QGIS processing\n• Buffer, clip, reproject, dissolve, intersection\n• Parameter validation and confirmation\n• Real-time progress feedback\n\nStatus: {dependency_status}\n\nType "!test" to run dependency diagnostics.']
+        #dependency_status = "✅ Dependencies OK" if API_EXIST else f"❌ Missing: {', '.join(MISSING_PACKAGES[:2])}"
+        #self.answers = [f'Status: {dependency_status}\n\nType "!test" to run dependency diagnostics.']
 
         # Show dockwidget at the bottom
         self.iface.addDockWidget(Qt.BottomDockWidgetArea, self.dlg)
@@ -632,6 +632,6 @@ class GeoGenie:
         # Initialize chat area
         self.dlg.chatgpt_ans.clear()
         self.dlg.chatgpt_ans.setAcceptRichText(True)
-        self.dlg.chatgpt_ans.append(self.answers[0])
+        #self.dlg.chatgpt_ans.append(self.answers[0])
         
         QgsMessageLog.logMessage("GeoGenie plugin started", 'GeoGenie', Qgis.Info)

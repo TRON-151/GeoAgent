@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -319,6 +319,7 @@
                <string notr="true">QLineEdit{
 	border-radius: 5px;
 	border: 1px solid #39394a;
+	background-color: #adb8b4;
 }</string>
               </property>
              </widget>
@@ -368,6 +369,7 @@
                <string notr="true">QLineEdit{
 	border-radius: 5px;
 	border: 1px solid #39394a;
+	background-color: #adb8b4;
 }</string>
               </property>
              </widget>
@@ -417,6 +419,7 @@
                <string notr="true">QLineEdit{
 	border-radius: 5px;
 	border: 1px solid #39394a;
+	background-color: #adb8b4;
 }</string>
               </property>
              </widget>
@@ -466,6 +469,7 @@
                <string notr="true">QLineEdit{
 	border-radius: 5px;
 	border: 1px solid #39394a;
+	background-color: #adb8b4;
 }</string>
               </property>
               <property name="text">
