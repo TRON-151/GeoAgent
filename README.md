@@ -1,7 +1,7 @@
 # GeoGenie 🌍🪄🤖
 
 <div align="center">
-  <img src="geogenie/icon.png" alt="GeoGenie Logo" width="120" height="120">
+  <img src="icon.png" alt="GeoGenie Logo" width="120" height="120">
   
   **Natural Language Geospatial Analysis for QGIS**
   
@@ -12,7 +12,7 @@
   [![License](https://img.shields.io/badge/license-GPL--2.0-orange.svg?style=flat-square)](#license)
   [![QGIS](https://img.shields.io/badge/QGIS-3.x-green.svg?style=flat-square)](#prerequisites)
   
-  [View Demo](#demo) • [Report Bug](https://github.com/TRON-151/GeoGenie/issues) • [Request Feature](https://github.com/TRON-151/geogenie/issues)
+  [View Demo](#demo) • [Report Bug](https://github.com/TRON-151/GeoAgent/issues) • [Request Feature](https://github.com/TRON-151/GeoAgent/issues)
 
 </div>
 
@@ -22,7 +22,7 @@
 
 - [About GeoGenie](#about-geogenie)
 - [Features](#features)
-- [Screenshots](#screenshots)
+- [GeoGenie_UI](#GeoGenie_UI)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
 - [AI Capabilities](#ai-capabilities)
