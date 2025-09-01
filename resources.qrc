@@ -1,5 +1,7 @@
 <RCC>
-    <qresource prefix="/plugins/geogenie" >
-        <file>icon.png</file>
+    <qresource prefix="/plugins/GeoAgent" >
+        <qresource prefix="/plugins/GeoAgent">
+    <file>icon.png</file>
+</qresource>
     </qresource>
 </RCC>
