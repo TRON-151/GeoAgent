@@ -245,7 +245,7 @@ This project is licensed under the GPL-2.0 License - see the [LICENSE](LICENSE) 
 **Ahmad Abubakar Ahmad**
 - Email: aabubaka@uni-muenster.de 
 - GitHub: [@AhmadAbubakarAhmadA](https://github.com/AhmadAbubakarAhmadA)
-- Project: [GeoGenie](https://github.com/TRON-151/GeoGenie)
+- Project: [GeoGenie](https://github.com/TRON-151/GeoAgent)
 
 ## 🙏 Acknowledgments
 
