@@ -1,5 +1,0 @@
-openai
-SpeechRecognition
-pyaudio
-pyttsx3
-pdfgpt==0.2.2
