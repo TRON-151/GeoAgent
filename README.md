@@ -33,7 +33,7 @@
 
 ## 🌟 About GeoGenie
 
-GeoGenie is a revolutionary QGIS plugin that bridges the gap between natural language and complex geospatial analysis. Simply ask questions in plain English, and GeoGenie will understand your intent and execute the appropriate QGIS operations using advanced AI models.
+GeoGenie is a QGIS plugin that bridges the gap between natural language and complex geospatial analysis. Simply ask questions in plain English, and GeoGenie will understand your intent and execute the appropriate QGIS operations using advanced AI models.
 
 ### 🛠️ Built With
 
@@ -71,22 +71,22 @@ GeoGenie is a revolutionary QGIS plugin that bridges the gap between natural lan
 - No data sent to external servers (except AI APIs)
 - Full control over your geospatial data
 
-## 📸 Screenshots
+## 📸 GeoGenie_UI
 
 <div align="center">
 
 ### Main Interface
-<img src="geogenie/Example_UI.png" alt="GeoGenie Main Interface" width="600">
+<img src="Example_UI.png" alt="GeoGenie Main Interface" width="600">
 
 *Clean, intuitive chat interface integrated seamlessly into QGIS*
 
 ### Natural Language Interaction
-<img src="geogenie/Example_chat.png" alt="Chat Example" width="600">
+<img src="Example_chat.png" alt="Chat Example" width="600">
 
 *Simply ask questions and get instant geospatial analysis results*
 
 ### API Configuration
-<img src="geogenie/Example_API.png" alt="API Settings" width="600">
+<img src="Example_API.png" alt="API Settings" width="600">
 
 *Easy setup with multiple AI provider support*
 
@@ -107,7 +107,7 @@ GeoGenie is a revolutionary QGIS plugin that bridges the gap between natural lan
 1. **Download GeoGenie**
    ```bash
    # Clone the repository
-   git clone https://github.com/your-username/geogenie.git
+   git clone https://github.com/your-username/GeoGenie.git
    ```
 
 2. **Install to QGIS**
@@ -162,7 +162,7 @@ GeoGenie is a revolutionary QGIS plugin that bridges the gap between natural lan
 🏢 "Extract building footprints from aerial imagery" 🚧 In Development
 ```
 
-*Note: Road detection is currently functional with high-resolution satellite imagery. Building segmentation and other computer vision features are under active development.*
+*Note: Road detection is partly functional with high-resolution satellite imagery. Building segmentation and other computer vision features are under active development.*
 
 ### Demo
 
@@ -243,9 +243,9 @@ This project is licensed under the GPL-2.0 License - see the [LICENSE](LICENSE) 
 ## 📞 Contact
 
 **Ahmad Abubakar Ahmad**
-- Email: aabubaka@uni-muenster.de
+- Email: aabubaka@uni-muenster.de 
 - GitHub: [@AhmadAbubakarAhmadA](https://github.com/AhmadAbubakarAhmadA)
-- Project: [GeoGenie](https://github.com/your-username/geogenie)
+- Project: [GeoGenie](https://github.com/TRON-151/GeoGenie)
 
 ## 🙏 Acknowledgments
 
