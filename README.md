@@ -1,4 +1,4 @@
-# GeoGenie 🌍🤖
+# GeoGenie 🌍🪄🤖
 
 <div align="center">
   <img src="geogenie/icon.png" alt="GeoGenie Logo" width="120" height="120">
@@ -7,12 +7,12 @@
   
   Transform your geographic questions into powerful QGIS operations using AI
   
-  [![Contributors](https://img.shields.io/badge/contributors-1-brightgreen.svg?style=flat-square)](#contributing)
+  [![Contributors](https://img.shields.io/badge/contributors-3-brightgreen.svg?style=flat-square)](#contributing)
   [![Last Update](https://img.shields.io/badge/last%20update-August%202025-blue.svg?style=flat-square)](#)
   [![License](https://img.shields.io/badge/license-GPL--2.0-orange.svg?style=flat-square)](#license)
   [![QGIS](https://img.shields.io/badge/QGIS-3.x-green.svg?style=flat-square)](#prerequisites)
   
-  [View Demo](#demo) • [Report Bug](https://github.com/your-username/geogenie/issues) • [Request Feature](https://github.com/your-username/geogenie/issues)
+  [View Demo](#demo) • [Report Bug](https://github.com/TRON-151/GeoGenie/issues) • [Request Feature](https://github.com/TRON-151/geogenie/issues)
 
 </div>
 
