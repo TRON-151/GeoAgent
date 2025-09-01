@@ -126,12 +126,12 @@ GeoGenie is a revolutionary QGIS plugin that bridges the gap between natural lan
 1. **Install Dependencies**
    ```bash
    # For QGIS Python environment
-   pip install openai>=1.0.0 anthropic>=0.18.0 google-generativeai
+   pip install openai>=1.0.0 anthropic>=0.18.0 onnxruntime>=1.15.0 opencv-python>=4.8.0 pillow>=9.0.0 google-generativeai
    ```
 
 2. **macOS Users** (QGIS 3.x)
    ```bash
-   /Applications/QGIS.app/Contents/MacOS/bin/python3 -m pip install openai>=1.0.0 anthropic>=0.18.0
+   /Applications/QGIS.app/Contents/MacOS/bin/python3 -m pip install openai>=1.0.0 anthropic>=0.18.0 onnxruntime>=1.15.0 opencv-python>=4.8.0 pillow>=9.0.0
    ```
 
 ### Quick Setup
