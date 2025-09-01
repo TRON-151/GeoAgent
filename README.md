@@ -166,11 +166,12 @@ GeoGenie is a QGIS plugin that bridges the gap between natural language and comp
 
 ### 🎬 Demo
 
-    <a href="https://uni-muenster.sciebo.de/s/cx9oMdTBGrrZPkN">
-    <img src="Demo_Video/Thumbnail.png" alt="Watch the Demo" width="600">
-     </a>
+<a href="https://uni-muenster.sciebo.de/s/cx9oMdTBGrrZPkN">
+     <img src="Demo_Video/Thumbnail.png" alt="Watch the Demo" width="600">
+</a>
 
 *Watch how GeoGenie works*
+
 
 
 
