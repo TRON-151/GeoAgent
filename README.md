@@ -164,9 +164,12 @@ GeoGenie is a QGIS plugin that bridges the gap between natural language and comp
 
 *Note: Road detection is partly functional with high-resolution satellite imagery. Building segmentation and other computer vision features are under active development.*
 
-### Demo
+### 🎬 Demo
 
-[Video](/Demo_Video/DEMO_GeoGenie.mp4)
+[![Watch the Demo](Demo_Video/Thumbnail.png)](Demo_Video/DEMO_GeoGenie.mp4)
+
+*Click the image above to watch how Geogenie Works*
+
 
 ## 🧠 AI Capabilities
 
